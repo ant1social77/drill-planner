@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drill &amp; Training Planner</title>
+<style>
+:root{
+  --navy:#0f2a43; --navy2:#173a5a; --accent:#e8833a; --accent2:#d06d22;
+  --ok:#2e8b57; --warn:#c98a00; --bad:#c0392b; --muted:#6b7a88;
+  --peach:#fbe4d5; --a2head:#e0edd9; --grey:#d9d9d9; --band:#d6e6ea; --line:#333;
+  --bg:#e8ecef;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#111}
+button{font:inherit;cursor:pointer}
+input,select{font:inherit}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:50;background:var(--navy);color:#fff;
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:8px 14px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.brand{display:flex;flex-direction:column;line-height:1.1;margin-right:8px}
+.brand b{font-size:15px;letter-spacing:.5px}
+.brand span{font-size:11px;opacity:.75}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tab{background:transparent;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:6px;padding:6px 12px;font-size:13px}
+.tab.on{background:#fff;color:var(--navy);border-color:#fff;font-weight:bold}
+.spacer{flex:1}
+.btn{border:1px solid #c5ced6;background:#fff;color:#123;border-radius:6px;padding:6px 11px;font-size:13px}
+.btn:hover{background:#f2f5f7}
+.btn.dark{background:var(--navy2);color:#fff;border-color:rgba(255,255,255,.25)}
+.btn.dark:hover{background:#21507a}
+.btn.gen{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:bold;padding:7px 14px}
+.btn.gen:hover{background:var(--accent2)}
+.btn.small{padding:3px 8px;font-size:12px}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn.ghost{background:transparent}
+
+/* ---------- views ---------- */
+.view{display:none;padding:18px 10px 60px}
+.view.on{display:block}
+.toolbar{max-width:1120px;margin:0 auto 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.toolbar label{font-size:13px;color:#334}
+.hint{font-size:12px;color:var(--muted)}
+
+/* ---------- paper pages (annex replica) ---------- */
+.page{background:#fff;width:1120px;max-width:100%;margin:0 auto 22px;padding:26px 30px 30px;
+  box-shadow:0 1px 4px rgba(0,0,0,.18);position:relative}
+.band{border:1.5px solid #4b6b78;background:var(--band);padding:4px 10px 3px;margin-bottom:12px}
+.band .t{text-align:center;font-weight:bold;font-size:17px;letter-spacing:.2px}
+.band .m{display:grid;grid-template-columns:1.3fr 1fr 1fr .8fr;font-size:12px;margin-top:2px}
+.band .m span:nth-child(2){text-align:left}
+.band .m span:nth-child(3){text-align:center}
+.band .m span:nth-child(4){text-align:right}
+.vbox{display:grid;grid-template-columns:150px 1fr 70px 120px;border:1px solid var(--line);margin-bottom:12px}
+.vbox div{padding:8px 10px;border-right:1px solid var(--line);font-size:13px}
+.vbox div:last-child{border-right:0}
+.vbox .lb{background:var(--peach);font-weight:bold}
+.vbox.a2 .lb{background:var(--a2head)}
+.vbox .v{text-align:center;font-weight:bold;font-size:14px}
+.vbox.a2 .v{font-family:"Times New Roman",serif;font-size:20px}
+.bul{border:1px solid var(--line);padding:6px 14px 6px 10px;margin-bottom:14px;font-size:12.5px}
+.bul div{display:flex;gap:10px;margin:2px 0}
+.bul div:before{content:"➢";flex:0 0 auto}
+
+table.grid{border-collapse:collapse;width:100%;table-layout:fixed;font-size:12px}
+table.grid th,table.grid td{border:1px solid var(--line);padding:2px 4px;vertical-align:middle}
+table.grid thead th{background:var(--peach);font-weight:bold;text-align:center;font-size:12px}
+table.grid.a2 thead th{background:var(--a2head)}
+table.grid thead th.st{text-align:left;font-size:12.5px}
+table.grid thead th.st small{font-weight:normal;font-size:11.5px}
+td.no{text-align:center}
+td.ti{line-height:1.2}
+td.ti .n{font-style:italic;font-size:10.5px}
+td.ti .r{font-style:italic;font-size:10.5px}
+td.fq{text-align:center}
+td.vert{text-align:center;padding:4px 2px}
+td.vert div{writing-mode:vertical-rl;transform:rotate(180deg);margin:auto;font-size:11.5px;line-height:1.25}
+td.m{text-align:center;cursor:pointer;height:24px;font-size:12px;position:relative;white-space:nowrap}
+td.m.g{background:var(--grey)}
+td.m:hover{outline:2px solid var(--accent);outline-offset:-2px}
+td.m.hw{font-family:"Segoe Print","Bradley Hand","Comic Sans MS",cursive;font-size:13px;color:#1c2b6b}
+td.m .np{font-size:8px;letter-spacing:-.2px;line-height:1.05;white-space:normal;display:block}
+td.m.sel{outline:2px solid var(--navy);outline-offset:-2px}
+td.narow{position:relative;cursor:pointer;height:22px;text-align:center}
+td.narow:before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px solid #222}
+td.narow span{position:relative;background:#fff;padding:0 6px;font-family:"Times New Roman",serif;font-size:12px}
+tr.sub td.ti{background:#cfcfcf}
+tr.sub td{height:22px}
+td.notes{font-size:12px;padding:6px 10px;line-height:1.35;font-style:italic}
+td.notes b{font-style:normal}
+.notes-out{font-size:12.5px;padding:6px 6px;line-height:1.35;font-style:italic}
+.duelayer{position:absolute;top:0;left:100%;width:96px;height:100%;pointer-events:none}
+.dl-h,.dl-r{position:absolute;left:8px;display:flex;align-items:center;font-size:11px;white-space:nowrap}
+.dl-h{font-weight:bold;color:#445}
+@media screen and (max-width:1330px){.view#v-a1 .page,.view#v-a2 .page{margin-left:max(10px,calc(50% - 560px - 52px))}}
+span.chip{display:inline-block;padding:1px 6px;border-radius:10px;font-weight:bold;font-size:10.5px}
+.chip.bad{background:#fde3df;color:var(--bad)} .chip.warn{background:#fff1cc;color:#8a5d00}
+.chip.ok{background:#e1f2e7;color:var(--ok)} .chip.mut{background:#eef0f2;color:var(--muted)}
+.chip.next{background:var(--accent);color:#fff}
+
+
+/* ---------- cell editor ---------- */
+#editor{position:absolute;z-index:80;background:#fff;border:1px solid #9fb0bd;border-radius:8px;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);padding:10px;width:270px;display:none;font-size:13px}
+#editor .hd{font-weight:bold;margin-bottom:2px}
+#editor .sb{color:var(--muted);font-size:11.5px;margin-bottom:8px}
+#editor input[type=text]{width:100%;padding:6px 8px;font-size:15px;border:1px solid #aab7c2;border-radius:5px}
+#editor .row{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+#editor label{display:flex;gap:6px;align-items:center;margin-top:8px;font-size:12px}
+
+.empty{max-width:640px;margin:40px auto;text-align:center;background:#fff;padding:30px;border-radius:10px}
+.sh{background:#fff;width:297mm;max-width:100%;margin:0 auto;padding:14mm 13mm;box-shadow:0 1px 4px rgba(0,0,0,.18)}
+/* ---------- settings ---------- */
+.set{background:#fff;max-width:820px;margin:0 auto;padding:20px 26px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.set h3{margin:18px 0 8px;font-size:15px;color:var(--navy);border-bottom:1px solid #dde3e8;padding-bottom:4px}
+.set .f{display:grid;grid-template-columns:260px 1fr;gap:8px 14px;align-items:center;font-size:13px;margin:6px 0}
+.set .f input[type=text],.set .f input[type=number],.set .f select{padding:5px 7px;border:1px solid #b9c6d0;border-radius:5px;max-width:300px}
+.wd{display:flex;gap:6px;flex-wrap:wrap}
+.wd label{border:1px solid #c5ced6;border-radius:5px;padding:3px 8px;font-size:12px}
+
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1d2b38;color:#fff;padding:9px 16px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .25s;z-index:100;pointer-events:none;max-width:90%}
+#toast.on{opacity:1}
+
+@media (max-width:760px){
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .set .f{grid-template-columns:1fr}
+}
+
+/* ---------- print ---------- */
+@page{size:A4 landscape;margin:9mm}
+@page sheet{size:A4 landscape;margin:12mm}
+@media print{
+  html,body{background:#fff}
+  .topbar,.toolbar,.no-print,#editor,#toast,.scr{display:none!important}
+  .prt{display:inline!important}
+  .view{padding:0}
+  .page,.sh{box-shadow:none;margin:0;width:100%;padding:0;overflow:visible}
+  .sh{page:sheet}
+  table.st th,.sh{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .page{page-break-after:always;break-after:page}
+  .page:last-child{page-break-after:auto}
+  th.due,td.due{display:none}
+  td.m:hover{outline:none}
+  tr.it.off{display:none}
+  tr.sess td,table.pl th,.card,.alert,td.m.g,tr.sub td.ti,table.grid thead th,.band,.vbox .lb{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  h2.pt{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  table.pl{page-break-inside:auto} tr{page-break-inside:avoid}
+}
+</style>
+<style id="sheetCss">
+.sh{font-family:Arial,Helvetica,sans-serif;color:#000}
+.shh{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #000;padding-bottom:2px;margin-bottom:calc(3mm * var(--fit,1))}
+.sht{font-size:15pt;font-weight:bold}
+.shs{font-size:10.5pt}
+table.st{width:100%;border-collapse:collapse;font-size:calc(10.5pt * var(--fit,1));line-height:1.15}
+table.st th{background:#e6e6e6;border:1px solid #000;padding:2px 4px;font-size:calc(10pt * var(--fit,1))}
+table.st td{border:1px solid #000;padding:1px 5px;height:calc(5.6mm * var(--fit,1));vertical-align:middle}
+table.st td.c{text-align:center;white-space:nowrap}
+table.st td.main{font-weight:bold}
+table.st td.sub{padding-left:10px}
+table.st tr.gs td{border-top:2px solid #000}
+.od{color:#c00}
+.shf{font-size:9.5pt;margin-top:3mm}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><b id="tbVessel"></b><span>Drill &amp; Training Planner</span></div>
+  <div class="tabs">
+    <button class="tab" data-v="a1">Annex 1 · Drills</button>
+    <button class="tab" data-v="a2">Annex 2 · Training</button>
+    <button class="tab" data-v="plan">Список на месяц</button>
+    <button class="tab" data-v="set">Настройки</button>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn gen" id="genBtn">⚙ Generate</button>
+  <button class="btn dark" id="printBtn">🖨 Print</button>
+  <button class="btn dark" id="expBtn" title="Сохранить резервную копию всех данных в файл">⬇ Export</button>
+  <button class="btn dark" id="impBtn" title="Загрузить данные из файла резервной копии">⬆ Import</button>
+  <input type="file" id="impFile" accept=".json,application/json" hidden>
+</div>
+
+<section class="view" id="v-a1">
+  <div class="toolbar">
+    <label>Год: <select class="yearSel"></select></label>
+    <label><input type="checkbox" class="dueTog" checked> Показывать сроки (Next due)</label>
+    <span class="hint">Нажми на клетку месяца, чтобы вписать или исправить дату. Пример: <b>17</b>, <b>14/24</b>, <b>Not Possible</b>, <b>N/A</b>.</span>
+  </div>
+  <div id="a1pages"></div>
+</section>
+
+<section class="view" id="v-a2">
+  <div class="toolbar">
+    <label>Год: <select class="yearSel"></select></label>
+    <label><input type="checkbox" class="dueTog" checked> Показывать сроки (Next due)</label>
+    <span class="hint">Нажми на клетку месяца, чтобы вписать или исправить дату.</span>
+  </div>
+  <div id="a2pages"></div>
+</section>
+
+<section class="view" id="v-plan">
+  <div class="toolbar">
+    <label>Месяц: <input type="month" id="planMonth"></label>
+    <button class="btn" id="planPrint">🖨 Печать</button>
+    <button class="btn" id="planWord">⬇ Word</button>
+    <span class="hint">Список считается по датам в Annex 1 и Annex 2. Дату и время проведения заполняешь от руки.</span>
+  </div>
+  <div id="planOut"></div>
+</section>
+
+<section class="view" id="v-set"><div class="set" id="setOut"></div></section>
+
+<div id="editor"></div>
+<div id="toast"></div>
+
+<script id="initial-data" type="application/json">{"app":"drill-planner","v":1,"source":"Первичный ввод с фото планера (19-Nov-2026)","settings":{"year":2026},"cells":{"as1|2026|0":"17","as1|2026|1":"14/24","as1|2026|2":"21","as1|2026|3":"11/25","as1|2026|4":"16/23","as1|2026|5":"09","as1|2026|6":"05","as1|2026|7":"05/29","as1|2026|8":"21","as1|2026|9":"17","as1|2026|10":"10","as2|2026|0":"Not Possible","as2|2026|1":"20/26","as2|2026|2":"Not Possible","as2|2026|3":"11","as2|2026|4":"Not Possible","as2|2026|5":"05","as2|2026|6":"05","as2|2026|7":"Not Possible","as2|2026|8":"19","as2|2026|9":"Not Possible","as2|2026|10":"03","as3|2026|1":"26","as3|2026|3":"11","as3|2026|6":"05","as3|2026|8":"19","as3|2026|10":"03","as4|2026|1":"26","as4|2026|3":"11","as4|2026|6":"05","as4|2026|8":"19","f1|2026|0":"26","f1|2026|9":"17","f2|2026|1":"24","f2|2026|4":"23","f3|2026|2":"21","f4|2026|3":"18","f5|2026|4":"16","f7|2026|5":"09","f8|2026|7":"05","f9|2026|6":"06","f9|2026|8":"21","f10|2026|7":"29","f10|2026|10":"10","t1|2026|1":"14","t1|2026|3":"11/25","t1|2026|5":"09","t1|2026|7":"05","t1|2026|8":"21","t1|2026|10":"10","t2|2026|0":"17","t2|2026|2":"21","t2|2026|4":"16","t2|2026|6":"06","t2|2026|7":"29","t2|2026|9":"17","t3|2026|1":"14","t3|2026|3":"11/25","t3|2026|5":"09","t3|2026|7":"05","t3|2026|8":"21","t3|2026|10":"10","t4|2026|0":"26","t4|2026|2":"21","t4|2026|4":"16","t4|2026|6":"06","t4|2026|7":"29","t4|2026|9":"17","t5|2026|1":"24","t5|2026|3":"18","t5|2026|5":"09","t5|2026|7":"05","t5|2026|8":"21","t5|2026|10":"10","t6|2026|0":"17","t6|2026|2":"21","t6|2026|4":"16","t6|2026|6":"05","t6|2026|7":"29","t6|2026|9":"17","t6|2026|10":"10","t7|2026|1":"19","t7|2026|3":"11","t7|2026|4":"16","t7|2026|5":"11","t7|2026|7":"06","t7|2026|9":"03","t8|2026|0":"17","t8|2026|2":"21","t8|2026|4":"14","t8|2026|6":"06","t8|2026|8":"05","t8|2026|9":"03","t9|2026|0":"26","t9|2026|3":"25","t9|2026|6":"06","t9|2026|8":"27","t10|2026|0":"10","t10|2026|3":"04","t10|2026|6":"05","t10|2026|8":"21","t11|2026|1":"14","t11|2026|5":"09","t11|2026|7":"05","t13|2026|1":"07","t13|2026|2":"07","t13|2026|4":"22","t13|2026|6":"25","t13|2026|9":"24","e1|2026|0":"10","e1|2026|6":"09","e2|2026|1":"07","e2|2026|7":"06","e3|2026|2":"14","e3|2026|8":"12","e4|2026|2":"14","e4|2026|3":"27","e4|2026|9":"10","e5|2026|4":"09","e6|2026|4":"02","e7|2026|0":"03","e7|2026|6":"09","e8|2026|0":"26","e8|2026|6":"09/23","e9|2026|2":"28","e9|2026|8":"12","e10|2026|3":"11","e10|2026|9":"10","e11|2026|4":"09","e12|2026|5":"27","e13|2026|1":"24","e13|2026|4":"23","o1|2026|0":"17","o1|2026|6":"09","o2|2026|1":"14","o2|2026|7":"07","o3|2026|2":"14","o3|2026|8":"05","o4|2026|3":"04","o4|2026|9":"03","o5|2026|4":"02","o5|2026|9":"24","o6|2026|4":"22","o7|2026|5":"11","s1|2026|0":"03","s1|2026|1":"28","s1|2026|3":"04","s1|2026|5":"09","s1|2026|8":"05","s2|2026|1":"07","s2|2026|4":"02","s2|2026|6":"06","s2|2026|8":"27","s3|2026|2":"07","s3|2026|4":"22","s3|2026|7":"06","s3|2026|9":"24","pc1|2026|4":"26","g1s1|2026|0":"03","g1s1|2026|6":"23","g1s2|2026|1":"07","g1s2|2026|7":"07","g1s3|2026|2":"14","g1s3|2026|8":"05","g1s4|2026|3":"11","g1s4|2026|9":"03","g1s5|2026|4":"02","g1s6|2026|5":"27","g1s7|2026|0":"10","g1s7|2026|6":"23","g1s8|2026|1":"28","g1s8|2026|7":"29","g1s9|2026|2":"14","g1s9|2026|8":"05","g1s10|2026|3":"11","g1s10|2026|10":"03","g1s11|2026|4":"02","g1s12|2026|4":"22","g1s13|2026|0":"N/A","g1s13|2026|6":"N/A","g1s14|2026|1":"07","g1s14|2026|7":"07","g1s15|2026|2":"07","g1s15|2026|8":"12","g1e1|2026|1":"28","g1e1|2026|7":"29","g1e2|2026|2":"21","g1e2|2026|8":"12","g1e3|2026|3":"04","g1e3|2026|9":"10","g1e4|2026|4":"09","g1e5|2026|5":"27","g2s1|2026|0":"17","g2s1|2026|6":"23","g2s2|2026|1":"14","g2s2|2026|7":"29","g2s3|2026|2":"07","g2s3|2026|8":"29","g2s4|2026|3":"N/A","g2s4|2026|9":"N/A","g2e1|2026|4":"09","g3n1|2026|2":"28","g3n1|2026|8":"21","g3n2|2026|3":"25","g3n2|2026|9":"17","g3n3|2026|4":"14","g3n4|2026|4":"16","g3n5|2026|0":"03","g3n5|2026|6":"24","g3b1|2026|0":"10","g3b1|2026|4":"22","g4s1|2026|0":"03","g4s1|2026|6":"24","g4s2|2026|1":"16","g4s2|2026|7":"08","g4e1|2026|2":"28","g4e1|2026|8":"17","g4e2|2026|3":"25","g4e2|2026|9":"19","g4e3|2026|4":"23","g4e4|2026|5":"27","g4e5|2026|0":"10","g4e5|2026|6":"24","g4e6|2026|1":"24","g4e6|2026|7":"29"},"rowNA":{"f6|2026":true,"f12|2026":true,"o8|2026":true,"o9|2026":true}}
+</script>
+<script>
+"use strict";
+/* =====================================================================
+   FORM TEMPLATE  (text of the company forms – not user data)
+   ===================================================================== */
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const G=(...m)=>m.map(x=>MON.indexOf(x));
+const ALLM=[0,1,2,3,4,5,6,7,8,9,10,11];
+
+const A1={code:'ANNEX 1 - DRILL PLANNER',date:'01-Aug-2026',rev:'Rev 21',
+ bullets:[
+  'Make this planner vessel-specific, meeting the stated intervals. The grey cells in the monthly columns are marked for guidance purpose.',
+  'Conduct <u>Abandon Ship and Fire Drill</u> prior to sailing if a vessel enters service for the first time, after modification of a major character or when engaging a new crew.',
+  '<u>Lower lifeboats to boat deck</u> as soon as possible, if a vessel enters service for the first time or when engaging a new crew.',
+  'Conduct <u>Abandon Ship and Fire Drill</u> within 24 hours of the vessel leaving a port if more than 25% of the crew have not participated in abandon ship on board that particular vessel in the previous month.',
+  'Conduct <u>Security Drill</u> within 1 week of the crew change if more than 25% of the crew have not participated in a security drill on board that particular vessel in the last 3 months.',
+  '<u>Drill Frequencies</u> - Even though regulations mention intervals such as every month, once in 2 months, etc, aim to carry out the drills within the due dates. Due date depends on previous drill date. Where appropriate, drills with related scenarios can be combined and conducted together.',
+  'Items marked with an (#) are identified to be particularly relevant for environmental protection'],
+ pages:[
+  [{sec:{id:'AS',ref:'AS',title:'ABANDON SHIP DRILL',rows:[
+    {id:'as1',no:'1.',t:'Abandon ship drill <i style="font-size:11px">(See Note 1 &amp; 2)</i>',s:'Abandon ship drill',f:'1M',g:ALLM},
+    {id:'as2',no:'2.',t:'Launching rescue boat (other than L/B) in water, if fitted.',n:'Note: Including testing of davit on stored power',s:'Launching rescue boat in water (incl. davit on stored power)',f:'1M',g:ALLM,ap:'rescueBoat',np:1},
+    {id:'as3',no:'3.',t:'Launching and manoeuvring of L/Bs in water',n:'Note: Including trying out Sprinkler System and checking Air Support System, if fitted. (For Freefall L/B, by secondary means of launching)',s:'Launching & manoeuvring of L/B in water',f:'3M',g:G('Mar','Jun','Sep','Dec'),np:1},
+    {id:'as4',no:'4.',t:'Simulated launching / Free fall launching',n:'Note: Simulated launch does NOT involve physical activation of free fall release mechanism',s:'Simulated launching / Free fall launching',f:'6M',g:G('Jan','Jul'),np:1}],
+   notes:'<b>Notes:</b><br>1.&nbsp; Each Abandon Ship Drill must include:<br>&nbsp;&nbsp;&nbsp; a. Announcing drill on public address system / other communication system<br>&nbsp;&nbsp;&nbsp; b. Mustering and preparing for duties described in muster list<br>&nbsp;&nbsp;&nbsp; c. Checking crew are suitably dressed and donning life jacket correctly<br>&nbsp;&nbsp;&nbsp; d. Preparing for launching and lowering L/B (at least 1) to boat deck. As far as practicable, lower different lifeboats at successive drills. If freefall L/B, preparations only.<br>&nbsp;&nbsp;&nbsp; e. Starting and Operating the L/B engines<br>&nbsp;&nbsp;&nbsp; f. Operation of davits used for launching life raft (L/R)<br>&nbsp;&nbsp;&nbsp; g. Instruction in the use of radio life-saving appliances<br>&nbsp;&nbsp;&nbsp; h. Testing of emergency lights for mustering and launching<br>2.&nbsp; On Malta flagged vessels, conduct Abandon Ship Drill on fortnightly basis.'}}],
+  [{sec:{id:'FIRE',ref:'Fire',title:'FIRE DRILLS',rot:'fire',vert:'Plan these drills <b><u>1 each month</u></b> at new location each time<br>(See note 1 &amp; 2)',rows:[
+    {id:'f1',no:'1.',t:'Accommodation Fire (Living Areas, etc)',g:G('Jan')},
+    {id:'f2',no:'2.',t:'Engine Room – Major Fire (Generator, boiler, bilge, etc)',n:'Note: Include escape drill, use of EEBD, evacuation of inured person (see note 3) and use of fixed firefighting system.',g:G('Feb')},
+    {id:'f3',no:'3.',t:'Store Room Fire (Paint Locker, Sample locker, etc)',n:'Note: Include operation and use of fixed firefighting system',g:G('Mar')},
+    {id:'f4',no:'4.',t:'Galley Fire',n:'Note: Include operation and use of fixed firefighting system',g:G('Apr')},
+    {id:'f5',no:'5.',t:'Cargo Spaces Fire (Holds / Tanks)',g:G('May')},
+    {id:'f6',no:'6.',t:'Cargo Deck Fire',g:G('Jun')},
+    {id:'f7',no:'7.',t:'Accommodation Fire (Electrical fire)',n:'Note: Areas such as Bridge, Control Rooms, Duct Spaces, etc',g:G('Jul')},
+    {id:'f8',no:'8.',t:'Engine Room – Purifier, scavenge space, etc',n:'Note: Include escape drill, use of EEBD, evacuation of inured person (see note 3) and use of fixed firefighting system.',g:G('Aug')},
+    {id:'f9',no:'9.',t:'Store Room Fire (e.g., Forepeak store, deck store, etc.,)',g:G('Sep')},
+    {id:'f10',no:'10.',t:'Galley Fire',n:'Note: Include operation &amp; use of fixed firefighting system',g:G('Oct')},
+    {id:'f11',no:'11.',t:'Cargo Spaces Fire (Holds / Tanks)',g:G('Nov')},
+    {id:'f12',no:'12.',t:'Cargo Deck Fire',g:G('Dec')}],
+   notes:'Notes:<br>1. Each Fire Drill must include:<br>&nbsp;&nbsp;&nbsp; a. Mustering and preparing for duties described in muster list<br>&nbsp;&nbsp;&nbsp; b. Starting of a fire pump, using at least the 2 jets of water<br>&nbsp;&nbsp;&nbsp; c. Checking of fireman’s outfit and other rescue equipment<br>&nbsp;&nbsp;&nbsp; d. Checking of communication equipment<br>&nbsp;&nbsp;&nbsp; e. Operation of watertight doors, fire doors, fire dampers and vents<br>&nbsp;&nbsp;&nbsp; f. Preparation of subsequent abandoning of the ship.<br>&nbsp;&nbsp;&nbsp; g. Planning search &amp; rescue (with due considerations for poor visibility in a smoke-filled compartment).<br>2. In Malta flagged vessels, conduct Fire Drills on fortnightly (14 days) basis.<br>3. If the E/R escape trunk doesn\'t extend to the lowest deck, include drill for evacuation of injured persons using stretcher/other means to the inside of emergency escape trunk.'}}],
+  [{sec:{id:'TR',ref:'Trg',title:'ONBOARD TRAINING, INSTRUCTIONS AND OTHER DRILLS',sub:'(These training and drills can be combined with other drills)',rows:[
+    {id:'t1',no:'1.',t:'Operation and use of ship’s inflatable liferafts',f:'2M',g:G('Feb','Apr','Jun','Aug','Oct','Dec')},
+    {id:'t2',no:'2.',t:'Problems and first-aid treatment of hypothermia',n:'Note: Include donning of immersion suits, thermal protective aid (TPA) and other appropriate first-aid procedures,',s:'Hypothermia – immersion suits, TPA, first aid',f:'2M',g:G('Jan','Mar','May','Jul','Sep','Nov')},
+    {id:'t3',no:'3.',t:'Use of LSA in severe weather and severe sea conditions',n:'Note: Include Hanging-off Pendants and Recovery Strops',f:'2M',g:G('Feb','Apr','Jun','Aug','Oct','Dec')},
+    {id:'t4',no:'4.',t:'Operation and use of fire-extinguishing appliances',n:'(See Note 1)',s:'Operation & use of fire-extinguishing appliances (Note 1)',f:'2M',g:G('Jan','Mar','May','Jul','Sep','Nov')},
+    {id:'t5',no:'5.',t:'Emergency fire pump and emergency generator – methods of starting and taking it on load',s:'Emergency fire pump & emergency generator – start, on load',f:'2M',g:G('Feb','Apr','Jun','Aug','Oct','Dec')},
+    {id:'t6',no:'6.',t:'Use of Pyrotechnics, LTA, EPIRB and SART.',f:'2M',g:G('Jan','Mar','May','Jul','Sep','Nov')},
+    {id:'t7',no:'7.',t:'Enclosed space entry and rescue drill',n:'Note: Including shipboard procedures for recognizing, evaluating, and controlling hazards associated with entry into enclosed spaces, checking and use of PPE, communication equipment, gas measuring instruments, rescue equipment, first aid and resuscitator. Ref: H&amp;S 5.2',f:'2M',g:G('Feb','Apr','Jun','Aug','Oct','Dec')},
+    {id:'t8',no:'8.',t:'Medical Emergency Procedures',n:'Note: Select 1 new scenario each time from medical emergencies given in Chapter 1 of Ship Captain’s Medical Guide.',s:'Medical Emergency Procedures (new scenario – Ship Captain’s Medical Guide ch.1)',f:'2M',g:G('Jan','Mar','May','Jul','Sep','Nov')},
+    {id:'t9',no:'9.',t:'Steering gear failure – emergency steering drill <sup>#</sup>',s:'Steering gear failure – emergency steering drill #',f:'3M',g:G('Feb','May','Aug','Nov')},
+    {id:'t10',no:'10.',t:'Emergency towing apparatus (ETA) - deployment procedures',f:'3M',g:G('Jan','Apr','Jul','Oct')},
+    {id:'t11',no:'11.',t:'Use of davit-launched L/R, if fitted',f:'4M',g:G('Feb','Jun','Oct'),ap:'davitLR'},
+    {id:'t12',no:'12.',t:'STS emergency drill',n:'Note: 24 hours ~ 7 days preceding an STS transfer operation<br>Ref: BGCM 4.10',f:'As required',g:[]},
+    {id:'t13',no:'13.',t:'Engine Overridable Power Limitation (OPL) Override drill',n:'Note: Applicable on vessel fitted with overridable engine power limiting devices. Include simulation of removing and reactivating limitation. Refer vessel’s Onboard Management Manual (OMM) and EMM-1/11.1',s:'Engine OPL Override drill',f:'3M',g:G('Mar','Jun','Sep','Dec'),ap:'opl'}],
+   notes:'Notes:<br>1.&nbsp; Instructions on operation and use of fire-extinguishing appliances must include:<br>&nbsp;&nbsp;&nbsp; a. Types of extinguishers (where possible, discharge 1 type)<br>&nbsp;&nbsp;&nbsp; b. Foam applicator<br>&nbsp;&nbsp;&nbsp; c. Container firefighting system on Container vessels. E.g., Water Mist Lance System, Portable Fire Monitor, etc<br>&nbsp;&nbsp;&nbsp; d. SCBA and EEBD – Use and precautions, including pre-donning checks.<br>&nbsp;&nbsp;&nbsp; e. Fixed firefighting system – CO2 / Foam / Water-mist / DCP etc.'}}],
+  [{sec:{id:'EM',ref:'Em',title:'EMERGENCY DRILLS',sub:'(These drills can be combined with other drills)',rows:[
+    {id:'e1',no:'1.',t:'Imminent collision / collision / damage to fixed and floating objects, and damage control <sup>#</sup>',n:'Note: Including emergency assistance to another vessel',s:'Imminent collision / collision / damage control #',f:'6M',g:G('Jan','Jul')},
+    {id:'e2',no:'2.',t:'Stranding / grounding <sup>#</sup>',s:'Stranding / grounding #',f:'6M',g:G('Feb','Aug')},
+    {id:'e3',no:'3.',t:'Flooding of engine room / cargo hold / duct keel / forecastle store etc',f:'6M',g:G('Mar','Sep')},
+    {id:'e4',no:'4.',t:'Structural / Hull failure,',n:'Note: On Bulk Carriers- Including MSC. Circ. 1143- Guidelines on Early Assessment of Hull Damage and Possible Need for Abandonment of Bulk Carriers. On tankers and gas carriers: Include breach of cargo containment system',s:'Structural / Hull failure (MSC.Circ.1143)',f:'6M',g:G('Apr','Oct')},
+    {id:'e5',no:'5.',t:'Main engine failure<sup>#</sup>',n:'Note: including M/E remote control power failure &amp; isolation of 1 cylinder',s:'Main engine failure #',f:'6M',g:G('May','Nov')},
+    {id:'e6',no:'6.',t:'Black out / auxiliary engine failure<sup>#</sup>',n:'Note: By activating- ACB trips, switchboard safeties (like reverse power trip), trip circuit of running AE (LO trip, CJW trips, etc). Include vessel specific blackout recovery procedures',s:'Black out / auxiliary engine failure #',f:'6M',g:G('Jun','Dec')},
+    {id:'e7',no:'7.',t:'Serious Personal Injuries',n:'Note: Including use of first aid measures (such as artificial respiration, CPR, O2 Resuscitator, use of AED, Treatment of electric shock, use of stretcher) and medivac by helicopter.',f:'6M',g:G('Jan','Jul')},
+    {id:'e8',no:'8.',t:'Helicopter Emergency Operations, including ditching, fire, and explosion',f:'6M',g:G('Feb','Aug')},
+    {id:'e9',no:'9.',t:'Heavy weather damage including cargo loss / damage / shifting<sup>#</sup>',s:'Heavy weather damage incl. cargo shifting #',f:'6M',g:G('Mar','Sep')},
+    {id:'e10',no:'10.',t:'Rescue / Evacuation from Elevator',f:'6M',g:G('Apr','Oct')},
+    {id:'e11',no:'11.',t:'Break away from jetty during cargo transfer',f:'6M',g:G('May','Nov')},
+    {id:'e12',no:'12.',t:'Man Overboard and Recovery of Persons from water<sup>*</sup>',n:'Note: Including emergency assistance to another vessel',s:'Man Overboard & recovery of persons from water',f:'6M',g:G('Jun','Dec')},
+    {id:'e13',no:'13.',t:'Emergency escape drill',f:'As required',g:[]}],
+   after:'* For Marshall Island Flag Vessels - Conduct a drill / training for person overboard procedures at intervals of not more than 3 months.'}}],
+  [{sec:{id:'OIL',ref:'Oil',title:'OIL SPILL / POLLUTION RESPONSE DRILLS <sup>#</sup>',sub:'(These drills can be combined with other drills)',rot:'oil',vert:'Plan these drills <b><u>1 each month</u></b> with<br>a new scenario each time.',rows:[
+    {id:'o1',no:'1.',t:'Collision / grounding',g:G('Jan','Aug')},
+    {id:'o2',no:'2.',t:'Fire or explosion',g:G('Feb','Sep')},
+    {id:'o3',no:'3.',t:'Excessive list',g:G('Mar','Oct')},
+    {id:'o4',no:'4.',t:'Hull failure / / internal tank failure / leaks',g:G('Apr','Nov')},
+    {id:'o5',no:'5.',t:'Critical equipment failure leading to a spill',n:'E.g., Main engine failure, steering failure',g:G('May','Dec')},
+    {id:'o6',no:'6.',t:'Pipeline leakage',n:'Note: Including failure of hydraulic lines',g:G('Jun')},
+    {id:'o7',no:'7.',t:'Cargo / Bunker Tank overflow',g:G('Jul')},
+    {id:'o8',no:'8.',t:'<span style="font-size:10px">Release of hazardous cargo into water <sup>#</sup><i>E.g., IMDG containers, pollution by harmful substances in packaged form, etc (If applicable)</i></span>',s:'Release of hazardous cargo into water',g:[]},
+    {id:'o9',no:'9.',t:'<span style="font-size:10px">Chemical spills / hazardous vapour release (other than chemical tankers)</span>',s:'Chemical spills / hazardous vapour release',g:[]}],
+   notesRow:'Note: After completion of drills update records in SOPEP, as applicable'}},
+   {sec:{id:'SEC',ref:'Sec',title:'SECURITY DRILLS',rows:[
+    {id:'s1',no:'1.',t:'Bomb threat<div style="font-size:11px;line-height:1.25">Access control and restricted areas tightened, security level raised, vessel search carried out.<br><u>Security elements covered:</u><br>• Tampering with equipment / cargo / stores<br>• Unauthorised access to or use of vessel<br>• Smuggling of weapons or equipment<br>• Use of vessel to carry those persons intending to cause a security incident and / or their equipment</div>',s:'Security drill – Bomb threat',f:'3M',g:G('Jan','Apr','Jul','Oct')},
+    {id:'s2',no:'2.',t:'Monitoring the vessel and surroundings and Damage control<div style="font-size:11px;line-height:1.25"><u>Security Elements Covered:</u><br>• Damage to vessel / port by explosion arson / sabotage<br>• Attack from seaward whilst at berth or at anchor<br>• Crew readiness at enhanced security levels</div>',s:'Security drill – Monitoring the vessel & surroundings, damage control',f:'3M',g:G('Feb','May','Aug','Nov')},
+    {id:'s3',no:'3.',t:'Piracy and hijacking contingency<div style="font-size:11px;line-height:1.25"><u>Security elements covered:</u><br>• Hijacking or seizure of vessel or personnel<br>• Use of vessel as weapon or means to cause damage<br>• Attack whilst at sea</div>',s:'Security drill – Piracy and hijacking contingency',f:'3M',g:G('Mar','Jun','Sep','Dec')}]}}],
+  [{sec:{id:'PREP',ref:'USCG',title:'USCG PREP EXERCISES',sub:'PREP: Preparedness for Response Exercise Program',rows:[
+    {id:'p1',no:'1.',t:'<b>Qualified Individual (QI) Notification Exercise</b><div style="font-size:11px;line-height:1.25">• Conduct while operating in US waters, including the EEZ.<br>• When operating outside US waters, prior to arrival 1<sup>st</sup> US port; if exercise not conducted in past 3 months<br>• Conduct at least 1 exercise per year during non-business hours</div>',s:'USCG – QI Notification Exercise',f:'3M',g:G('Jan','Apr','Jul','Oct'),ap:'uscg'},
+    {id:'p2',no:'2.',t:'<b>Emergency Procedures Exercise</b><div style="font-size:11px;line-height:1.25">• In 2 of the 4 exercises per calendar year involve an SMFF component, and in other 2, an oil spill scenario<br>• Conduct at least 2 unannounced exercises per calendar year</div>',s:'USCG – Emergency Procedures Exercise',f:'3M',g:G('Feb','May','Aug','Nov'),ap:'uscg'}],
+   notes:'Notes:<br>• Applicable to all VRP / NTVRP holders. Ref US regulation update 47F<br>• The QI Notifications and Emergency Procedure Exercises (EP) may be combined, allowing vessels to do as few as four (4) shipboard exercises per year to satisfy the VRP/NTVRP requirements rather than as many as eight (8) separate exercises. For details on Remote Assessment and Consultation Exercise (RACE), refer PAM Chapter- ‘Drills and Training for Emergency Response’<br>• In addition to above:<br>&nbsp;&nbsp;&nbsp;&nbsp;○ Government-Initiated Unannounced Exercise (GIUE) - when initiated by federal government<br>&nbsp;&nbsp;&nbsp;&nbsp;○ State Agency Initiated Unannounced Drill - when initiated by state government'}},
+   {sec:{id:'PAN',ref:'PCSOPEP',title:'PANAMA CANAL SOPEP NOTIFICATION EXERCISES',sub:'Applicable for vessels with PCSOPEP',rows:[
+    {id:'pc1',no:'1.',t:'<b>Authorised Person Notification Exercise</b> <i>(See note)</i>',s:'Panama Canal SOPEP – Authorised Person Notification Exercise',f:'6M',g:G('May','Nov'),ap:'panama'}],
+   notesRow:'Note: These exercises may be conducted outside Panama Canal waters. Additionally, at any time, the Panama Canal Authority (ACP) may require a vessel to perform a PCSOPEP notification exercise and/or to participate in response drills and exercises with the ACP. Refer vessel-specific PCSOPEP and maintain the records of all such exercise for at least 3 years.'}}]
+ ]};
+
+const A2={code:'ANNEX 2 - SHIPBOARD TRAINING PLANNER',date:'01-Nov-2026',rev:'Rev 22',
+ bullets:[
+  'Use training methods as outlined in ‘03 Cross Reference for Shipboard Training Planner’ available in Company Software – ‘Training Material Folder’.',
+  'Make this planner vessel-specific, meeting the 6m intervals. The grey cells in the monthly columns are marked for guidance purpose.',
+  'Items marked with ‘#’ are relevant for occupational health and safety',
+  'At the end of each month, Master to verify the training records'],
+ pages:[
+  [{sec:{id:'G1a',ref:'G1',grp:'ALL',title:'GROUP - 1: All Officers and Crew',a2:1,rows:[
+    {sub:'Safe Work Practices'},
+    {id:'g1s1',no:'1.',t:'One-minute Hazard Identification Guide &amp; Risk Assessment',f:'6M',g:G('Jan','Jul')},
+    {id:'g1s2',no:'2.',t:'Permit-To-Work (PTW) System <i class="r">- Refer H&amp;S Ch.5.0</i>',f:'6M',g:G('Feb','Aug')},
+    {id:'g1s3',no:'3.',t:'Lockout / Tagout (LOTO) System <i class="r">- Refer H&amp;S Ch 5.7</i>',f:'6M',g:G('Mar','Sep')},
+    {id:'g1s4',no:'4.',t:'Use of Shipboard Cranes for Personnel Transfer and Heavy-Weight Handling. <i class="r">Note: Including emergency operations as maker’s instructions. Refer H&amp;S 6.2, H&amp;S 8.5, vessel specific checklists on cranes, PTW-11 &amp; GB-10.</i>',s:'Use of Shipboard Cranes for Personnel Transfer & Heavy-Weight Handling',f:'6M',g:G('Apr','Oct')},
+    {id:'g1s5',no:'5.',t:'Control of Substances Hazardous to Health (COSHH) e.g., chemicals, paints, asbestos. <i class="r">Refer H&amp;S Ch 9.0 &amp; IHM</i>',s:'COSHH – chemicals, paints, asbestos',f:'6M',g:G('May','Nov')},
+    {id:'g1s6',no:'6.',t:'Safe Mooring Procedures. <i class="r">- Refer NMM 14.3</i>',f:'6M',g:G('Jun','Dec')},
+    {id:'g1s7',no:'7.',t:'Manual Handling Techniques <i class="r">- Refer H&amp;S Ch 6.7</i>',f:'6M',g:G('Jan','Jul')},
+    {id:'g1s8',no:'8.',t:'Helicopter Operations <i class="r">- Refer H&amp;S Ch 6.3</i>',f:'6M',g:G('Feb','Aug')},
+    {id:'g1s9',no:'9.',t:'Mental Health &amp; Suicide Prevention Guidelines <i class="r">- Refer GB-01</i>',f:'6M',g:G('Mar','Sep')},
+    {id:'g1s10',no:'10.',t:'Code of Conduct <i class="r">- Refer GB-08</i>',f:'6M',g:G('Apr','Oct')},
+    {id:'g1s11',no:'11.',t:'Be Safe+ Programme <i class="r">- Refer H&amp;S Ch 3.5</i>',f:'6M',g:G('May','Nov')},
+    {id:'g1s12',no:'12.',t:'Cyber Security Management, Response and Recovery – Training and Drill <i class="r">- Refer PAM Ch. 22</i>',f:'6M',g:G('Jun','Dec')}]}}],
+  [{sec:{id:'G1b',ref:'G1',grp:'ALL',title:'GROUP - 1: All Officers and Crew',a2:1,rows:[
+    {id:'g1s13',no:'13.',t:'Hazards &amp; safety precautions when handling Alternate Fuels <i class="r">– Refer TMM Chapter 4</i>',f:'6M',g:G('Jan','Jul')},
+    {id:'g1s14',no:'14.',t:'Prevention of Harassment and Bullying.<div class="n">Screen Harassment Awareness PPT/ Video. Refer PAM Ch.11.10</div>',s:'Prevention of Harassment and Bullying',f:'6M',g:G('Feb','Aug')},
+    {id:'g1s15',no:'15.',t:'Use of scaffolding.<div class="n">Refer H&amp;S Ch. 6.4 &amp; Training Material #188</div>',s:'Use of scaffolding',f:'6M',g:G('Mar','Sep')},
+    {sub:'Environment Management System'},
+    {id:'g1e1',no:'1.',t:'Garbage Management <i class="r">- Refer vessel GMP</i>',f:'6M',g:G('Feb','Aug')},
+    {id:'g1e2',no:'2.',t:'Ballast Water Management System, including BWTS<i class="r">- Refer EMM-1 /8.1 &amp; BWMP Chapter -Crew Training and Familiarisation.</i>',s:'Ballast Water Management System incl. BWTS',f:'6M',g:G('Mar','Sep')},
+    {id:'g1e3',no:'3.',t:'Bio Fouling Management <i class="r">- Refer vessel BFMP Ch. 12</i>',f:'6M',g:G('Apr','Oct')},
+    {id:'g1e4',no:'4.',t:'Ship Energy Efficiency Management <i class="r">- Refer vessel SEEMP</i>',f:'6M',g:G('May','Nov')},
+    {id:'g1e5',no:'5.',t:'Sea Guardians-Preserving our Oceans<i class="r">- Refer QA-44 &amp; DLMS</i>',f:'6M',g:G('Jun','Dec')}]}},
+   {sec:{id:'G2',ref:'G2',grp:'OFFICERS',title:'GROUP 2: All Officers',a2:1,rows:[
+    {sub:'Safe Work Practices'},
+    {id:'g2s1',no:'1.',t:'Gas Measuring Instruments – Calibration Procedures',f:'6M',g:G('Jan','Jul')},
+    {id:'g2s2',no:'2.',t:'Rest Hour Management and Fatigue Management <i class="r">- Refer PAM 11.6 &amp; GB-06</i>',f:'6M',g:G('Feb','Aug')},
+    {id:'g2s3',no:'3.',t:'Drug and Alcohol Policy and Procedures <i class="r">- Refer PAM Ch. 14.1</i><div class="n">Including onboard alcohol testing device</div>',s:'Drug and Alcohol Policy and Procedures',f:'6M',g:G('Mar','Sep')},
+    {id:'g2s4',no:'4.',t:'Inert Gas / N<sub>2</sub> System (if fitted) – Operation and precautions<div class="n">– Including DLMS Video - N2 the Silent Killer</div>',s:'Inert Gas / N2 System – operation and precautions',f:'6M',g:G('Apr','Oct')},
+    {sub:'Environment Management System'},
+    {id:'g2e1',no:'1.',t:'Energy conservation - CBT',f:'6M',g:G('May','Nov')}]}}],
+  [{sec:{id:'G3',ref:'G3',grp:'DECK',title:'GROUP 3: Deck Department – Deck Officers and Crew',a2:1,rows:[
+    {sub:'Navigation (For Deck Officers only)'},
+    {id:'g3n1',no:'1.',t:'GMDSS Procedures - Sending, Acknowledgement and Receipt of Distress Messages, EPIRB alerts, including cancellation of falsely transmitted messages <i class="r">- Refer NMM 6.5 &amp; Training material # 69.</i>',s:'GMDSS Procedures – distress messages, EPIRB alerts, false alert cancellation',f:'6M',g:G('Mar','Sep'),grp:'DECK OFF'},
+    {id:'g3n2',no:'2.',t:'Use of Radars / ARPA <i class="r">- Refer QA Poster 49</i>',f:'6M',g:G('Apr','Oct'),grp:'DECK OFF'},
+    {id:'g3n3',no:'3.',t:'GNSS &amp; ECDIS Failure Training and Drill <i class="r">- Refer Checklist EMRG/13 &amp; 14.and NMM 13.3 Cyber Security – Jamming and Spoofing</i>',s:'GNSS & ECDIS Failure Training and Drill (jamming / spoofing)',f:'6M',g:G('May','Nov'),grp:'DECK OFF'},
+    {id:'g3n4',no:'4.',t:'Use of engines as a collision avoidance tool and gaining confidence in its use, including practice of engine slow down and ME overrides',s:'Use of engines as a collision avoidance tool (slow down, ME overrides)',f:'6M',g:G('Jun','Dec'),grp:'DECK OFF'},
+    {id:'g3n5',no:'5.',t:'Pilot Ladders and associated arrangements / equipment<div class="n">Note: Include rigging, inspections, regulations and standards associated with pilot ladders and their use. Ref H&amp;S 6.2, LSAMP 6.7 &amp; TM#164.</div>',s:'Pilot Ladders and associated arrangements / equipment',f:'6M',g:G('Jan','Jul'),grp:'DECK OFF'},
+    {sub:'Cargo Work - Bulk Carriers'},
+    {id:'g3b1',no:'1.',t:'Emergency Operation of the Hatch Cover, including operational demonstration <i class="r">- Refer WI BULK- 102</i>',s:'Emergency Operation of the Hatch Cover (demonstration)',f:'6M',g:G('Jan','Jul')}]}}],
+  [{sec:{id:'G4',ref:'G4',grp:'ENGINE',title:'GROUP 4: Engine Department – Engine Officers and Crew',a2:1,rows:[
+    {sub:'Safe Work Practices'},
+    {id:'g4s1',no:'1.',t:'Cleaning Scavenge Spaces and Boiler Tubes - Special precautions.',f:'6M',g:G('Jan','Jul')},
+    {id:'g4s2',no:'2.',t:'Alternate Fuel Bunkering and Fuel Management System<div class="n">(Vessel-specific equipment and system. Applicable to dual-fuel vessels)</div>',s:'Alternate Fuel Bunkering and Fuel Management System',f:'6M',g:G('Feb','Aug')},
+    {sub:'Environment Management System'},
+    {id:'g4e1',no:'1.',t:'Oily Water Separator and 15 PPM Oil Content Monitor',f:'6M',g:G('Mar','Sep')},
+    {id:'g4e2',no:'2.',t:'Incinerators - Correct use and PPE',f:'6M',g:G('Apr','Oct')},
+    {id:'g4e3',no:'3.',t:'Bilge / Ballast lines and pumping arrangements',f:'6M',g:G('May','Nov')},
+    {id:'g4e4',no:'4.',t:'Sewage and Grey Water Pollution Prevention',f:'6M',g:G('Jun','Dec')},
+    {id:'g4e5',no:'5.',t:'Air Pollution Prevention',f:'6M',g:G('Jan','Jul')},
+    {id:'g4e6',no:'6.',t:'Exhaust Gas Cleaning System (EGCS) - Operation &amp; Precautions including handling of hazardous chemicals',s:'EGCS – operation & precautions incl. hazardous chemicals',f:'6M',g:G('Feb','Aug')}]}}]
+ ]};
+
+/* row index */
+const ROW={}, SECS={};
+for(const [ax,A] of [[1,A1],[2,A2]]) A.pages.forEach((pg,pi)=>pg.forEach(b=>{
+  const s=b.sec; s.annex=ax; SECS[s.id]=s; let k=0;
+  s.rows.forEach(r=>{ if(r.sub) return; k++; r.sec=s; r.annex=ax; r.k=k; r.page=pi+1; ROW[r.id]=r; });
+}));
+const strip=h=>{const d=document.createElement('div');d.innerHTML=h;return d.textContent.replace(/\s+/g,' ').trim();};
+const label=r=>(r.s||strip(r.t)).replace(/\s*[-–]\s*Refer\b.*$/,'').replace(/\s+Refer\s.*$/,'');
+const refOf=r=>{ if(r.annex===2){const m=/^g(\d)([senb])(\d+)$/.exec(r.id); const p={s:'',n:'N',e:'E',b:'B'}[m[2]]; return `A2·G${m[1]}-${p}${m[3]}`;} return `A1·${r.sec.ref}-${r.no.replace('.','')}`; };
+
+/* =====================================================================
+   STATE  (user data – lives in browser storage, editable, exportable)
+   ===================================================================== */
+const KEY='drillPlanner.v1';
+const DEF_SETTINGS={vessel:'',year:new Date().getFullYear(),flag:'other',
+  rescueBoat:true,davitLR:true,opl:true,uscg:false,panama:true,
+  weekdays:[6],times:['10:00','14:00'],trainTime:'15:30',maxUnits:2,maxTrain:3,
+  lookahead:10,safety:2,split:14,pairAsFire:true,avoid:'12-24, 12-25, 12-31, 01-01',showDue:true};
+let S=null, storageOK=true;
+function blank(){return {app:'drill-planner',v:1,settings:{...DEF_SETTINGS},cells:{},rowNA:{},plans:{},log:[]};}
+function save(){ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){ if(storageOK){storageOK=false;toast('⚠ Браузер не даёт сохранять данные — регулярно делай Export');} } }
+function load(){
+  try{ const raw=localStorage.getItem(KEY); if(raw){ S=JSON.parse(raw); S.settings={...DEF_SETTINGS,...S.settings}; return; } }catch(e){ storageOK=false; }
+  S=blank();
+  try{ const seed=JSON.parse(document.getElementById('initial-data').textContent); applyImport(seed,true); }catch(e){}
+  save();
+}
+function applyImport(d,first){
+  if(!d||d.app!=='drill-planner') throw new Error('bad file');
+  if(first){ Object.assign(S.cells,d.cells||{}); Object.assign(S.rowNA,d.rowNA||{}); S.settings={...S.settings,...(d.settings||{})};
+    S.log.push({at:new Date().toISOString(),what:d.source||'import'}); }
+  else { S={...blank(),...d,settings:{...DEF_SETTINGS,...(d.settings||{})}}; }
+}
+
+/* =====================================================================
+   DATE HELPERS
+   ===================================================================== */
+const pad=n=>String(n).padStart(2,'0');
+const ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parseYmd=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c);};
+const fmt=d=>d?`${pad(d.getDate())}-${MON[d.getMonth()]}-${String(d.getFullYear()).slice(2)}`:'—';
+const fmtL=d=>d?`${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]} ${pad(d.getDate())}-${MON[d.getMonth()]}`:'—';
+const addDays=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);
+function addMonths(d,n){const y=d.getFullYear(),m=d.getMonth()+n,last=new Date(y,m+1,0).getDate();return new Date(y,m,Math.min(d.getDate(),last));}
+const addIv=(d,iv)=>iv.d?addDays(d,iv.d):addMonths(d,iv.m);
+const today=()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate());};
+const ruMonth=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+
+/* =====================================================================
+   CELL LOGIC
+   ===================================================================== */
+const ck=(id,y,m)=>`${id}|${y}|${m}`;
+function parseCell(v){
+  v=(v||'').trim(); if(!v) return {days:[]};
+  if(/^n\s*\/?\s*a$/i.test(v)) return {days:[],na:true};
+  if(/not\s*poss/i.test(v)) return {days:[],np:true};
+  return {days:(v.match(/\d{1,2}/g)||[]).map(Number).filter(x=>x>=1&&x<=31)};
+}
+function rowIsNA(id,y){return !!S.rowNA[`${id}|${y}`];}
+function applicable(r,y){ if(r.ap&&!S.settings[r.ap]) return false; if(rowIsNA(r.id,y)) return false; return true; }
+function interval(r){
+  const st=S.settings;
+  if(st.flag==='malta'&&(r.id==='as1'||r.sec.id==='FIRE')) return {d:14};
+  if(st.flag==='mi'&&r.id==='e12') return {m:3};
+  if(r.sec.rot) return {m:1};
+  const m=/^(\d)M$/.exec(r.f||''); return m?{m:+m[1]}:null;
+}
+/* last completion strictly before `before` (Date) ; N/A counts as completion on the 1st */
+function lastDone(id,before){
+  let best=null; const pre=id+'|';
+  for(const k in S.cells){ if(!k.startsWith(pre)) continue;
+    const [,y,m]=k.split('|').map(Number); const p=parseCell(S.cells[k]);
+    const ds=p.na?[1]:p.days;
+    for(const day of ds){ const last=new Date(y,m+1,0).getDate(); const d=new Date(y,m,Math.min(day,last));
+      if(before&&d>=before) continue; if(!best||d>best) best=d; } }
+  return best;
+}
+function addDay(id,date){
+  const k=ck(id,date.getFullYear(),date.getMonth()); const p=parseCell(S.cells[k]);
+  let days=(p.na||p.np)?[]:p.days.slice(); const dd=date.getDate();
+  if(!days.includes(dd)) days.push(dd); days.sort((a,b)=>a-b);
+  S.cells[k]=days.map(pad).join('/');
+}
+function removeDay(id,date){
+  const k=ck(id,date.getFullYear(),date.getMonth()); const p=parseCell(S.cells[k]);
+  const days=p.days.filter(x=>x!==date.getDate());
+  if(days.length) S.cells[k]=days.map(pad).join('/'); else delete S.cells[k];
+}
+function nextDue(r){ // as of today, for the Next-due column
+  const iv=interval(r); if(!iv) return null; const l=lastDone(r.id); return l?addIv(l,iv):'never';
+}
+
+/* =====================================================================
+   RENDER ANNEX PAGES (replica)
+   ===================================================================== */
+function band(A,pi,n){return `<div class="band"><div class="t">${A.code}</div><div class="m"><span>Policy and Administration Manual</span><span>${A.date}</span><span>${A.rev}</span><span>Page ${pi} of ${n}</span></div></div>`;}
+function vbox(ax){const st=S.settings;return `<div class="vbox ${ax===2?'a2':''}"><div class="lb">Vessel</div><div class="v">${st.vessel?esc(st.vessel):'<span class="no-print" style="color:#b33;font-weight:normal;font-size:12px">укажи название судна в «Настройках»</span>'}</div><div class="lb">Year</div><div class="v">${viewYear}</div></div>`;}
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let viewYear=2026;
+
+function rotPick(sec,before){
+  const rows=sec.rows.filter(r=>!r.sub&&applicable(r,(before||today()).getFullYear()));
+  let pick=null,pl;
+  for(const r of rows){ const l=lastDone(r.id,before), lv=l?l.getTime():-Infinity;
+    if(pick===null||lv<pl){pick=r;pl=lv;} }
+  return pick;
+}
+function dueCell(r){
+  if(!S.settings.showDue) return '';
+  if(r.f==='As required') return `<span class="chip mut">as req.</span>`;
+  if(!applicable(r,viewYear)) return `<span class="chip mut">n/a</span>`;
+  if(r.sec.rot){ const p=rotPick(r.sec); return p&&p.id===r.id?'<span class="chip next">◀ next</span>':''; }
+  const d=nextDue(r); if(!d) return '';
+  if(d==='never') return `<span class="chip bad">no record</span>`;
+  const t=today(), diff=(d-t)/864e5;
+  const cls=diff<0?'bad':diff<=31?'warn':'ok';
+  return `<span class="chip ${cls}">${fmt(d)}</span>`;
+}
+function secTable(s){
+  const a2=s.annex===2, y=viewYear, nrows=s.rows.length;
+  let h=`<table class="grid ${a2?'a2':''}"><colgroup><col style="width:4.5%"><col style="width:${a2?'40%':'37.5%'}"><col style="width:${a2?'6%':'8.5%'}">${'<col>'.repeat(12)}</colgroup>`;
+  h+=`<thead><tr><th class="st" colspan="2">${s.title}${s.sub?`<br><small>${s.sub}</small>`:''}</th><th>Freq.</th>${MON.map(m=>`<th>${m}</th>`).join('')}</tr></thead><tbody>`;
+  s.rows.forEach((r,i)=>{
+    if(r.sub){ h+=`<tr class="sub"><td></td><td class="ti">${r.sub}</td><td></td>${'<td></td>'.repeat(12)}</tr>`; return; }
+    h+=`<tr data-rid="${r.id}"><td class="no">${r.no}</td><td class="ti">${r.t}${r.n?`<div class="n">${r.n}</div>`:''}</td>`;
+    if(s.vert){ if(i===0) h+=`<td class="vert" rowspan="${nrows}"><div>${s.vert}</div></td>`; }
+    else h+=`<td class="fq">${r.f||''}</td>`;
+    if(rowIsNA(r.id,y)) h+=`<td class="narow" colspan="12" data-id="${r.id}" data-m="0"><span>N/A</span></td>`;
+    else for(let m=0;m<12;m++){ const v=S.cells[ck(r.id,y,m)]||''; const p=parseCell(v);
+      const inner=p.np?`<span class="np">Not<br>Possible</span>`:esc(v);
+      h+=`<td class="m${r.g.includes(m)?' g':''}" data-id="${r.id}" data-m="${m}">${inner}</td>`; }
+    h+='</tr>';
+  });
+  if(s.notesRow) h+=`<tr><td colspan="15" class="notes" style="font-style:italic">${s.notesRow}</td></tr>`;
+  if(s.notes) h+=`<tr><td colspan="15" class="notes">${s.notes}</td></tr>`;
+  h+='</tbody></table>';
+  if(s.after) h+=`<div class="notes-out">${s.after}</div>`;
+  return h;
+}
+function renderAnnex(ax){
+  const A=ax===1?A1:A2, n=A.pages.length;
+  document.getElementById(ax===1?'a1pages':'a2pages').innerHTML=A.pages.map((pg,pi)=>{
+    let h=`<div class="page ${S.settings.showDue?'':'nodue'}">`+band(A,pi+1,n);
+    if(pi===0) h+=vbox(ax)+`<div class="bul">${A.bullets.map(b=>`<div><span>${b}</span></div>`).join('')}</div>`;
+    pg.forEach((b,bi)=>{ h+=(bi?'<div style="height:18px"></div>':'')+secTable(b.sec); });
+    return h+'</div>';
+  }).join('');
+  placeDue(ax);
+}
+/* Next-due chips live OUTSIDE the paper (grey margin on the right) – never printed */
+function placeDue(ax){
+  if(!S.settings.showDue) return;
+  document.querySelectorAll(`#${ax===1?'a1pages':'a2pages'} .page`).forEach(pg=>{
+    const pr=pg.getBoundingClientRect(); let h='';
+    pg.querySelectorAll('table.grid').forEach(t=>{ const th=t.querySelector('thead tr').getBoundingClientRect();
+      h+=`<div class="dl-h" style="top:${th.top-pr.top}px;height:${th.height}px">Next due</div>`; });
+    pg.querySelectorAll('tr[data-rid]').forEach(tr=>{ const c=dueCell(ROW[tr.dataset.rid]); if(!c) return;
+      const b=tr.getBoundingClientRect(); h+=`<div class="dl-r" style="top:${b.top-pr.top}px;height:${b.height}px">${c}</div>`; });
+    const L=document.createElement('div'); L.className='duelayer no-print'; L.innerHTML=h; pg.appendChild(L);
+  });
+}
+window.addEventListener('resize',()=>{ if(curView==='a1'||curView==='a2') renderAnnex(curView==='a1'?1:2); });
+
+/* ---------- cell editor ---------- */
+const ED=document.getElementById('editor'); let edCtx=null;
+function openEditor(td){
+  closeEditor(); const id=td.dataset.id, m=+td.dataset.m, r=ROW[id], y=viewYear;
+  edCtx={id,m,y,td}; td.classList.add('sel');
+  const isNA=rowIsNA(id,y), v=S.cells[ck(id,y,m)]||'';
+  ED.innerHTML=`<div class="hd">${esc(label(r))}</div><div class="sb">${refOf(r)} · ${isNA?'вся строка N/A':MON[m]+' '+y} · ${r.f||'1 each month'}</div>
+   ${isNA?'':`<input type="text" id="edIn" value="${esc(v)}" placeholder="напр. 17 или 14/24">
+   <div class="row"><button class="btn small ok" data-a="save">Сохранить</button><button class="btn small" data-a="np">Not Possible</button><button class="btn small" data-a="na">N/A</button><button class="btn small" data-a="clr">Очистить</button></div>`}
+   <label><input type="checkbox" id="edRow" ${isNA?'checked':''}> Вся строка N/A за ${y} год (не применимо)</label>
+   <div class="row" style="justify-content:flex-end"><button class="btn small ghost" data-a="x">Закрыть</button></div>`;
+  const rc=td.getBoundingClientRect(); ED.style.display='block';
+  let left=rc.left+window.scrollX-110; left=Math.max(8,Math.min(left,window.scrollX+document.documentElement.clientWidth-285));
+  ED.style.left=left+'px'; ED.style.top=(rc.bottom+window.scrollY+6)+'px';
+  const inp=document.getElementById('edIn'); if(inp){inp.focus();inp.select();inp.onkeydown=e=>{if(e.key==='Enter')edAct('save');if(e.key==='Escape')closeEditor();};}
+  document.getElementById('edRow').onchange=e=>{ const k=`${id}|${y}`; if(e.target.checked) S.rowNA[k]=true; else delete S.rowNA[k]; save(); closeEditor(); rerender(); };
+}
+function edAct(a){
+  if(!edCtx) return; const {id,m,y}=edCtx, k=ck(id,y,m);
+  if(a==='save'){ const v=document.getElementById('edIn').value.trim(); if(v) S.cells[k]=normCell(v); else delete S.cells[k]; }
+  if(a==='np') S.cells[k]='Not Possible';
+  if(a==='na') S.cells[k]='N/A';
+  if(a==='clr') delete S.cells[k];
+  if(a!=='x'){ save(); rerender(); }
+  closeEditor();
+}
+function normCell(v){ const p=parseCell(v); if(p.na) return 'N/A'; if(p.np) return 'Not Possible'; if(p.days.length) return [...new Set(p.days)].sort((a,b)=>a-b).map(pad).join('/'); return v; }
+function closeEditor(){ ED.style.display='none'; if(edCtx&&edCtx.td) edCtx.td.classList.remove('sel'); edCtx=null; }
+ED.addEventListener('click',e=>{const a=e.target.dataset.a; if(a) edAct(a);});
+document.addEventListener('click',e=>{
+  const td=e.target.closest('td.m,td.narow'); if(td){ openEditor(td); e.stopPropagation(); return; }
+  if(!e.target.closest('#editor')) closeEditor();
+});
+
+/* =====================================================================
+   GENERATOR — list of drills & trainings due next month (no dates)
+   ===================================================================== */
+const SESS_OF={as1:'AS',as2:'AS',as3:'AS',as4:'AS',t1:'AS',t2:'AS',t3:'AS',t6:'AS',t11:'AS',e12:'AS',
+  t4:'FIRE',t5:'FIRE',e8:'FIRE',
+  t7:'MED',t8:'MED',e7:'MED',e10:'MED',
+  t9:'ENG',t10:'ENG',t13:'ENG',e1:'ENG',e2:'ENG',e3:'ENG',e4:'ENG',e5:'ENG',e6:'ENG',e9:'ENG',e11:'ENG',
+  s1:'SEC',s2:'SEC',s3:'SEC',p1:'PREP',p2:'PREP',pc1:'PREP'};
+const KORD={FIRE:1,AS:2,MED:3,ENG:4,SEC:5,PREP:6};
+function evalRow(r,F,L){
+  const iv=interval(r); if(!iv) return null;
+  const last=lastDone(r.id,F), due=last?addIv(last,iv):null;
+  if(due&&due>L) return null;
+  return {id:r.id,last,due,over:!due||due<F};
+}
+function generate(y,m){
+  const st=S.settings, F=new Date(y,m,1), L=new Date(y,m+1,0), items=[];
+  for(const s of Object.values(SECS)){ if(s.annex!==1) continue;
+    if(s.rot){ const rows=s.rows.filter(r=>applicable(r,y)); if(!rows.length) continue;
+      let last=null; rows.forEach(r=>{const l=lastDone(r.id,F); if(l&&(!last||l>last)) last=l;});
+      const due=last?addIv(last,interval(rows[0])):null;
+      items.push({id:rotPick(s,F).id,rot:s.rot,last,due,over:!due||due<F}); continue; }
+    for(const r of s.rows){ if(r.sub||!applicable(r,y)||r.f==='As required') continue; const e=evalRow(r,F,L); if(e) items.push(e); }
+  }
+  const eff=i=>i.over?addDays(F,-1):i.due;
+  const engHas=items.some(i=>!i.rot&&SESS_OF[i.id]==='ENG');
+  const keyOf=i=>i.rot==='fire'?'FIRE':i.rot==='oil'?(engHas?'ENG':'FIRE'):SESS_OF[i.id];
+  const by={}; items.forEach(i=>(by[keyOf(i)]=by[keyOf(i)]||[]).push(i));
+  let groups=[];
+  for(const k in by){ let cur=null;
+    for(const it of by[k].sort((a,b)=>eff(a)-eff(b))){
+      if(!cur||((eff(it)-cur.dl)/864e5>(+st.split||14)&&!it.rot)){ cur={key:k,dl:eff(it),items:[]}; groups.push(cur); }
+      cur.items.push(it); } }
+  if(st.pairAsFire){ const f=groups.find(g=>g.key==='FIRE'), a=groups.find(g=>g.key==='AS');
+    if(f&&a){ f.items.push(...a.items); f.dl=new Date(Math.min(f.dl,a.dl)); groups=groups.filter(g=>g!==a); } }
+  /* Annex 1 order: drills first (as they appear in the Annex), combined trainings right under them */
+  groups.forEach(g=>g.items.sort((a,b)=>(isTrg(a)-isTrg(b))||ordIn(a)-ordIn(b)));
+  groups.sort((a,b)=>ordIn(a.items[0])-ordIn(b.items[0]));
+  const tr=[];
+  for(const s of Object.values(SECS)){ if(s.annex!==2) continue;
+    for(const r of s.rows){ if(r.sub||!applicable(r,y)) continue; const e=evalRow(r,F,L); if(e) tr.push(e); } }
+  tr.sort((a,b)=>ordIn(a)-ordIn(b));
+  return {groups,trainings:tr};
+}
+const ORD=Object.keys(ROW); const ordIn=i=>ORD.indexOf(i.id);
+const isTrg=i=>!i.rot&&ROW[i.id].sec.id==='TR'&&!/drill/i.test(label(ROW[i.id]));
+function itemName(i){
+  if(i.rot==='fire') return 'Fire drill';
+  if(i.rot==='oil') return 'Oil spill / pollution response drill';
+  const r=ROW[i.id], a=label(r), b=strip(r.t).replace(/\s*[-–]\s*Refer\b.*$/,'');
+  let n=(['AS','TR','EM'].includes(r.sec.id)&&b.length<a.length&&b.length>8?b:a).replace(/\s*#$/,'').replace(/[.,]$/,'');
+  if(ROW[i.id].sec.id==='TR'&&!/drill/i.test(n)) n+=' (training)';
+  return n;
+}
+
+/* =====================================================================
+   MONTHLY SHEET  (one A4 page, to print and fill in by hand)
+   ===================================================================== */
+const GRP={ALL:'All','DECK OFF':'Deck Off.',DECK:'Deck',ENGINE:'Engine',OFFICERS:'All Off.'};
+function sheetHTML(ym){
+  const [y,m]=ym.split('-').map(Number); const P=generate(y,m-1); const st=S.settings;
+  const dt=d=>d?fmt(d):'—';
+  const last=i=>i.over?`<b class="od" title="срок уже прошёл">${dt(i.last)}</b>`:dt(i.last);
+  const fq=i=>{const iv=interval(ROW[i.id]); return iv?(iv.d?iv.d+'D':iv.m+'M'):(ROW[i.id].f||'');};
+  let h=`<div class="sh"><div class="shh"><div><div class="sht">DRILLS &amp; TRAININGS — ${MON[m-1].toUpperCase()} ${y}</div>
+    <div class="shs">${st.vessel?esc(st.vessel):''}</div></div><div class="shs" style="text-align:right">Annex 1 ${A1.rev} · Annex 2 ${A2.rev}</div></div>
+    <table class="st"><colgroup><col style="width:4%"><col><col style="width:7%"><col style="width:9%"><col style="width:13%"><col style="width:13%"></colgroup>
+    <thead><tr><th>№</th><th>Drill</th><th>Freq.</th><th>Last</th><th>Date</th><th>Time</th></tr></thead><tbody>`;
+  P.groups.forEach((g,gi)=>{ const n=g.items.length;
+    g.items.forEach((i,ii)=>{ h+=`<tr class="${ii===0?'gs':''}">`+(ii===0?`<td rowspan="${n}" class="c">${gi+1}</td>`:'')+
+      `<td class="${ii?'sub':'main'}">${ii?'+ ':''}${esc(itemName(i))}</td><td class="c">${fq(i)}</td><td class="c">${last(i)}</td>`+
+      (ii===0?`<td rowspan="${n}"></td><td rowspan="${n}"></td>`:'')+'</tr>'; }); });
+  if(!P.groups.length) h+=`<tr><td colspan="6" class="c">—</td></tr>`;
+  h+=`</tbody></table><table class="st" style="margin-top:3mm"><colgroup><col style="width:4%"><col><col style="width:8%"><col style="width:7%"><col style="width:9%"><col style="width:13%"><col style="width:13%"></colgroup>
+    <thead><tr><th>№</th><th>Training</th><th>Group</th><th>Freq.</th><th>Last</th><th>Date</th><th>Time</th></tr></thead><tbody>`;
+  P.trainings.forEach((t,i)=>{ const r=ROW[t.id];
+    h+=`<tr><td class="c">${i+1}</td><td>${esc(label(r))}</td><td class="c">${GRP[r.grp||r.sec.grp]||''}</td><td class="c">${fq(t)}</td><td class="c">${last(t)}</td><td></td><td></td></tr>`; });
+  if(!P.trainings.length) h+=`<tr><td colspan="7" class="c">—</td></tr>`;
+  h+=`</tbody></table></div>`;
+  return h;
+}
+function renderPlan(){ const o=document.getElementById('planOut'); o.innerHTML=sheetHTML(curYm()); fitSheet(); }
+function fitSheet(){ const sh=document.querySelector('#planOut .sh'); if(!sh) return;
+  const pw=273*96/25.4, ph=186*96/25.4-8;            /* A4 landscape, 12 mm margins */
+  const keep=[sh.style.width,sh.style.padding,sh.style.boxShadow];
+  sh.style.width=pw+'px'; sh.style.padding='0'; let f=1;
+  for(let k=0;k<12;k++){ sh.style.setProperty('--fit',f); if(sh.scrollHeight<=ph||f<=0.62) break; f=Math.round((f-0.02)*100)/100; }
+  [sh.style.width,sh.style.padding]=keep; }
+window.addEventListener('beforeprint',fitSheet);
+const curYm=()=>document.getElementById('planMonth').value;
+function doGenerate(ym){ document.getElementById('planMonth').value=ym; show('plan'); }
+function downloadWord(){
+  const ym=curYm(); const css=document.getElementById('sheetCss').textContent.replace(/calc\(([\d.]+)(pt|mm|px) \* var\(--fit,1\)\)/g,'$1$2');
+  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><style>@page WordSection1{size:29.7cm 21cm;mso-page-orientation:landscape;margin:1.2cm}div.WordSection1{page:WordSection1}${css}</style></head><body><div class="WordSection1">${sheetHTML(ym)}</div></body></html>`;
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿',html],{type:'application/msword'}));
+  a.download=`Drills_${ym}.doc`; document.body.appendChild(a); a.click(); a.remove();
+}
+
+/* =====================================================================
+   SETTINGS VIEW
+   ===================================================================== */
+function renderSettings(){
+  const st=S.settings;
+  const chk=(k,t)=>`<div class="f"><span>${t}</span><span><input type="checkbox" data-k="${k}" ${st[k]?'checked':''}></span></div>`;
+  document.getElementById('setOut').innerHTML=`
+  <h3 style="margin-top:0">Судно</h3>
+  <div class="f"><span>Название судна</span><input type="text" data-k="vessel" value="${esc(st.vessel)}" placeholder="название вашего судна"></div>
+  <div class="f"><span>Флаг (влияет на интервалы)</span><select data-k="flag">
+     <option value="other" ${st.flag==='other'?'selected':''}>Другой / стандартные интервалы</option>
+     <option value="malta" ${st.flag==='malta'?'selected':''}>Malta — Abandon ship и Fire drill каждые 14 дней</option>
+     <option value="mi" ${st.flag==='mi'?'selected':''}>Marshall Islands — MOB каждые 3 месяца</option></select></div>
+  ${chk('rescueBoat','Rescue boat (кроме L/B) установлен')}${chk('davitLR','Davit-launched L/R установлен')}${chk('opl','Overridable Power Limitation (OPL) установлен')}
+  ${chk('panama','PCSOPEP (Панамский канал) — применимо')}${chk('uscg','USCG PREP (VRP / NTVRP) — применимо')}
+  <h3>Список на месяц</h3>
+  ${chk('pairAsFire','Fire drill и Abandon ship — одной строкой (один день)')}
+  <h3>Данные</h3>
+  <p class="hint">Все даты хранятся в этом браузере на этом компьютере. Регулярно делай <b>Export</b> — это резервная копия в одном файле. На другом компьютере открой этот же HTML и нажми <b>Import</b>.</p>
+  <p class="hint">Записей в Annex: ${Object.keys(S.cells).length} · ${storageOK?'сохранение в браузере работает':'<b style="color:var(--bad)">сохранение в браузере НЕ работает — делай Export</b>'}</p>
+  <button class="btn" id="wipe" style="color:var(--bad)">Очистить все данные…</button>`;
+}
+document.getElementById('setOut').addEventListener('change',e=>{
+  const t=e.target, st=S.settings;
+  if(t.dataset.wd!==undefined){ const i=+t.dataset.wd; st.weekdays=t.checked?[...new Set([...st.weekdays,i])]:st.weekdays.filter(x=>x!==i); }
+  else if(t.dataset.k){ const k=t.dataset.k;
+    if(t.type==='checkbox') st[k]=t.checked;
+    else if(k==='times') st.times=t.value.split(/[,;\s]+/).filter(x=>/^\d{1,2}:\d{2}$/.test(x));
+    else if(t.type==='number') st[k]=+t.value; else st[k]=t.value; }
+  save(); document.getElementById('tbVessel').textContent=st.vessel||'Vessel —'; toast('Сохранено');
+});
+document.getElementById('setOut').addEventListener('click',e=>{
+  if(e.target.id==='wipe'&&confirm('Удалить ВСЕ даты, планы и настройки? Сначала лучше сделать Export.')){ S=blank(); save(); rerender(); toast('Данные очищены'); }
+});
+
+/* =====================================================================
+   SHELL
+   ===================================================================== */
+let curView='a1';
+function show(v){ curView=v; document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v)); closeEditor();
+  if(v==='a1') renderAnnex(1); if(v==='a2') renderAnnex(2); if(v==='plan') renderPlan(); if(v==='set') renderSettings();
+  try{sessionStorage.setItem('dpView',v);}catch(e){} }
+function rerender(){ fillYears(); show(curView); updGen(); document.getElementById('tbVessel').textContent=S.settings.vessel||'Vessel —'; }
+function nextYm(){ const t=today(); const d=new Date(t.getFullYear(),t.getMonth()+1,1); return `${d.getFullYear()}-${pad(d.getMonth()+1)}`; }
+function updGen(){ const [y,m]=nextYm().split('-').map(Number); document.getElementById('genBtn').textContent=`⚙ Generate · ${MON[m-1]} ${y}`; }
+function fillYears(){ const ys=new Set([today().getFullYear(),today().getFullYear()+1,+S.settings.year]);
+  Object.keys(S.cells).forEach(k=>ys.add(+k.split('|')[1]));
+  document.querySelectorAll('.yearSel').forEach(sel=>{ sel.innerHTML=[...ys].sort().map(y=>`<option ${y===viewYear?'selected':''}>${y}</option>`).join(''); });
+  document.querySelectorAll('.dueTog').forEach(c=>c.checked=!!S.settings.showDue); }
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>show(b.dataset.v));
+document.querySelectorAll('.yearSel').forEach(s=>s.onchange=()=>{viewYear=+s.value; rerender();});
+document.querySelectorAll('.dueTog').forEach(c=>c.onchange=()=>{S.settings.showDue=c.checked; save(); rerender();});
+document.getElementById('genBtn').onclick=()=>doGenerate(nextYm());
+document.getElementById('planPrint').onclick=()=>window.print();
+document.getElementById('planWord').onclick=downloadWord;
+document.getElementById('planMonth').onchange=renderPlan;
+document.getElementById('printBtn').onclick=()=>{ closeEditor(); window.print(); };
+document.getElementById('expBtn').onclick=()=>{
+  const blob=new Blob([JSON.stringify({...S,exported:new Date().toISOString()},null,1)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`DrillPlanner_${(S.settings.vessel||'backup').replace(/\W+/g,'_')}_${ymd(today())}.json`; document.body.appendChild(a); a.click(); a.remove();
+  toast('Резервная копия сохранена');
+};
+document.getElementById('impBtn').onclick=()=>document.getElementById('impFile').click();
+document.getElementById('impFile').onchange=e=>{ const f=e.target.files[0]; if(!f) return; const rd=new FileReader();
+  rd.onload=()=>{ try{ const d=JSON.parse(rd.result); if(!confirm('Заменить текущие данные данными из файла?')) return; applyImport(d,false); save(); rerender(); toast('Данные загружены'); }catch(err){ alert('Это не файл резервной копии Drill Planner'); } e.target.value=''; };
+  rd.readAsText(f); };
+let tt; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),2600); }
+
+load();
+viewYear=today().getFullYear(); if(!Object.keys(S.cells).some(k=>k.split('|')[1]==viewYear)) viewYear=+S.settings.year||viewYear;
+document.getElementById('planMonth').value=nextYm();
+let v0='a1'; try{v0=sessionStorage.getItem('dpView')||'a1';}catch(e){}
+rerender(); show(v0);
+</script>
+</body>
+</html>
