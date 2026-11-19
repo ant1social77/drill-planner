@@ -76,7 +76,7 @@ td.ti .r{font-style:italic;font-size:10.5px}
 td.fq{text-align:center}
 td.vert{text-align:center;padding:4px 2px}
 td.vert div{writing-mode:vertical-rl;transform:rotate(180deg);margin:auto;font-size:11.5px;line-height:1.25}
-td.m{text-align:center;cursor:pointer;height:24px;font-size:12px;position:relative;white-space:nowrap}
+td.m{text-align:center;cursor:pointer;height:24px;font-size:12px;white-space:nowrap}
 td.m.g{background:var(--grey)}
 td.m:hover{outline:2px solid var(--accent);outline-offset:-2px}
 td.m.hw{font-family:"Segoe Print","Bradley Hand","Comic Sans MS",cursive;font-size:13px;color:#1c2b6b}
@@ -102,7 +102,7 @@ span.chip{display:inline-block;padding:1px 6px;border-radius:10px;font-weight:bo
 
 /* ---------- cell editor ---------- */
 #editor{position:absolute;z-index:80;background:#fff;border:1px solid #9fb0bd;border-radius:8px;
-  box-shadow:0 8px 24px rgba(0,0,0,.25);padding:10px;width:270px;display:none;font-size:13px}
+  box-shadow:0 8px 24px rgba(0,0,0,.25);padding:10px;width:310px;display:none;font-size:13px}
 #editor .hd{font-weight:bold;margin-bottom:2px}
 #editor .sb{color:var(--muted);font-size:11.5px;margin-bottom:8px}
 #editor input[type=text]{width:100%;padding:6px 8px;font-size:15px;border:1px solid #aab7c2;border-radius:5px}
@@ -111,6 +111,45 @@ span.chip{display:inline-block;padding:1px 6px;border-radius:10px;font-weight:bo
 
 .empty{max-width:640px;margin:40px auto;text-align:center;background:#fff;padding:30px;border-radius:10px}
 .sh{background:#fff;width:297mm;max-width:100%;margin:0 auto;padding:14mm 13mm;box-shadow:0 1px 4px rgba(0,0,0,.18)}
+@media screen{td.pd,td.pg,td.tc{cursor:pointer}td.pd:hover,td.pg:hover,td.tc:hover,input.tm:hover,input.tm:focus{outline:2px solid var(--accent);outline-offset:-2px}input.tm:focus{background:#fff8ef}}
+#cal{margin-top:4px}
+.cal-h{font-weight:bold;text-align:center;margin:2px 0 6px;color:var(--navy)}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-w{font-size:10.5px;color:var(--muted);text-align:center}
+.cal-d{border:1px solid #d3dbe2;background:#fff;border-radius:5px;height:30px;font-size:13px;padding:0}
+.cal-d.we{background:#f4f6f8}
+.cal-d:hover{border-color:var(--accent)}
+.cal-d.td{border:2px solid var(--navy2)}
+.cal-d.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:bold}
+.cal-s{font-size:12px;margin-top:6px;color:#334}
+.tp-se{display:flex;align-items:flex-end;gap:8px;justify-content:center;margin:6px 0 4px}
+.tp-f{display:flex;flex-direction:column;align-items:center;margin:0!important;border:2px solid #c5ced6;border-radius:8px;padding:2px 8px 4px;background:#fff}
+.tp-f.on{border-color:var(--accent);background:#fff8ef}
+.tp-f small{font-size:10.5px;color:var(--muted)}
+.tp-f input{border:0;background:transparent;width:86px;text-align:center;font-size:24px;font-weight:bold;font-family:inherit;padding:0;outline:none;letter-spacing:1px}
+.tp-f input.bad{color:var(--bad)}
+.tp-dash{font-size:22px;font-weight:bold;padding-bottom:8px}
+.tp-hint{font-size:11.5px;color:#445;text-align:center;min-height:16px;margin-bottom:6px}
+.tp-wheels{display:flex;justify-content:center;align-items:center;gap:6px;position:relative;margin-bottom:6px}
+.tp-col{display:flex;flex-direction:column;align-items:center}
+.tp-cap{font-size:10px;color:var(--muted);margin-bottom:2px}
+.tp-colon{font-size:22px;font-weight:bold;padding-top:12px}
+.tp-wh{height:150px;width:70px;overflow-y:scroll;scroll-snap-type:y mandatory;scrollbar-width:none;border-radius:8px;background:#f6f8fa;position:relative;
+  -webkit-mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent);mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent)}
+.tp-wh::-webkit-scrollbar{display:none}
+.tp-col:before{content:"";position:absolute;margin-top:72px;width:70px;height:30px;border-top:1px solid #9fb0bd;border-bottom:1px solid #9fb0bd;pointer-events:none}
+.tp-pad{height:60px}
+.tp-it{height:30px;line-height:30px;text-align:center;font-size:17px;scroll-snap-align:center;cursor:pointer;color:#556}
+.tp-it.on{font-weight:bold;color:#000;font-size:19px}
+.mx{margin-top:8px;border-top:1px solid #e1e6ea;padding-top:6px}
+.mx-t{font-size:11px;color:var(--muted);margin-bottom:4px}
+.mx-r{display:flex;flex-wrap:wrap;gap:3px;align-items:center;margin-bottom:4px}
+.mx-r b{width:22px;font-size:12px}
+.mx-c{border:1px solid #c5ced6;background:#fff;border-radius:10px;font-size:10.5px;padding:1px 7px;color:#556}
+.mx-c.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.mx-c.np.on{background:#c0392b;border-color:#c0392b}
+#planOut .sh+.sh{margin-top:22px}
+@media print{#planOut .sh+.sh{margin-top:0;break-before:page;page-break-before:always}}
 /* ---------- settings ---------- */
 .set{background:#fff;max-width:820px;margin:0 auto;padding:20px 26px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.15)}
 .set h3{margin:18px 0 8px;font-size:15px;color:var(--navy);border-bottom:1px solid #dde3e8;padding-bottom:4px}
@@ -161,6 +200,13 @@ table.st td.main{font-weight:bold}
 table.st td.sub{padding-left:10px}
 table.st tr.gs td{border-top:2px solid #000}
 .od{color:#c00}
+.sh-od .sht{color:#c00}
+.sh-od .shh{border-bottom-color:#c00}
+table.st .oc{line-height:1.25}
+table.st .oc+.oc{border-top:1px dashed #999;margin-top:2px;padding-top:2px}
+table.st .oc small{display:block;font-weight:normal;font-size:.78em;color:#444}
+input.tm{border:0;background:transparent;width:100%;text-align:center;font:inherit;padding:0;color:#1c2b6b;font-weight:bold}
+table.st td.dt{font-weight:bold;color:#1c2b6b}
 .shf{font-size:9.5pt;margin-top:3mm}
 </style>
 </head>
@@ -186,7 +232,7 @@ table.st tr.gs td{border-top:2px solid #000}
   <div class="toolbar">
     <label>Год: <select class="yearSel"></select></label>
     <label><input type="checkbox" class="dueTog" checked> Показывать сроки (Next due)</label>
-    <span class="hint">Нажми на клетку месяца, чтобы вписать или исправить дату. Пример: <b>17</b>, <b>14/24</b>, <b>Not Possible</b>, <b>N/A</b>.</span>
+    <span class="hint">Нажми на клетку месяца — откроется календарь. Там же Not Possible, N/A и «строка не применима».</span>
   </div>
   <div id="a1pages"></div>
 </section>
@@ -195,7 +241,7 @@ table.st tr.gs td{border-top:2px solid #000}
   <div class="toolbar">
     <label>Год: <select class="yearSel"></select></label>
     <label><input type="checkbox" class="dueTog" checked> Показывать сроки (Next due)</label>
-    <span class="hint">Нажми на клетку месяца, чтобы вписать или исправить дату.</span>
+    <span class="hint">Нажми на клетку месяца — откроется календарь.</span>
   </div>
   <div id="a2pages"></div>
 </section>
@@ -205,7 +251,7 @@ table.st tr.gs td{border-top:2px solid #000}
     <label>Месяц: <input type="month" id="planMonth"></label>
     <button class="btn" id="planPrint">🖨 Печать</button>
     <button class="btn" id="planWord">⬇ Word</button>
-    <span class="hint">Список считается по датам в Annex 1 и Annex 2. Дату и время проведения заполняешь от руки.</span>
+    <span class="hint">Нажми на клетку <b>Date</b> — дата запишется в Annex. В <b>Time</b> выбери начало и окончание (время хранится только здесь).</span>
   </div>
   <div id="planOut"></div>
 </section>
@@ -390,10 +436,15 @@ const DEF_SETTINGS={vessel:'',year:new Date().getFullYear(),flag:'other',
   weekdays:[6],times:['10:00','14:00'],trainTime:'15:30',maxUnits:2,maxTrain:3,
   lookahead:10,safety:2,split:14,pairAsFire:true,avoid:'12-24, 12-25, 12-31, 01-01',showDue:true};
 let S=null, storageOK=true;
-function blank(){return {app:'drill-planner',v:1,settings:{...DEF_SETTINGS},cells:{},rowNA:{},plans:{},log:[]};}
-function save(){ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){ if(storageOK){storageOK=false;toast('⚠ Браузер не даёт сохранять данные — регулярно делай Export');} } }
+function blank(){return {app:'drill-planner',v:1,settings:{...DEF_SETTINGS},cells:{},rowNA:{},plans:{},times:{},log:[]};}
+function save(){ S.rev=(S.rev||0)+1; try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){ if(storageOK){storageOK=false;toast('⚠ Браузер не даёт сохранять данные — регулярно делай Export');} } }
+let loadWarn='';
+function norm(){ S.settings={...DEF_SETTINGS,...S.settings}; S.times=S.times||{}; S.cells=S.cells||{}; S.rowNA=S.rowNA||{}; delete S.plans; }
 function load(){
-  try{ const raw=localStorage.getItem(KEY); if(raw){ S=JSON.parse(raw); S.settings={...DEF_SETTINGS,...S.settings}; return; } }catch(e){ storageOK=false; }
+  let raw=null; try{ raw=localStorage.getItem(KEY); }catch(e){ storageOK=false; }
+  if(raw){ try{ S=JSON.parse(raw); norm(); return; }
+    catch(e){ try{ localStorage.setItem(KEY+'.corrupt-'+Date.now(),raw); }catch(_){}
+      loadWarn='⚠ Сохранённые данные повреждены. Копия отложена, загружены стартовые данные — сделай Import из последнего Export.'; } }
   S=blank();
   try{ const seed=JSON.parse(document.getElementById('initial-data').textContent); applyImport(seed,true); }catch(e){}
   save();
@@ -429,7 +480,8 @@ function parseCell(v){
   if(/not\s*poss/i.test(v)) return {days:[],np:true};
   return {days:(v.match(/\d{1,2}/g)||[]).map(Number).filter(x=>x>=1&&x<=31)};
 }
-function rowIsNA(id,y){return !!S.rowNA[`${id}|${y}`];}
+/* N/A for a row carries over to the following years until it is switched off */
+function rowIsNA(id,y){ for(let yy=y;yy>=y-50;yy--){ const v=S.rowNA[`${id}|${yy}`]; if(v!==undefined) return !!v; } return false; }
 function applicable(r,y){ if(r.ap&&!S.settings[r.ap]) return false; if(rowIsNA(r.id,y)) return false; return true; }
 function interval(r){
   const st=S.settings;
@@ -537,23 +589,31 @@ window.addEventListener('resize',()=>{ if(curView==='a1'||curView==='a2') render
 /* ---------- cell editor ---------- */
 const ED=document.getElementById('editor'); let edCtx=null;
 function openEditor(td){
-  closeEditor(); const id=td.dataset.id, m=+td.dataset.m, r=ROW[id], y=viewYear;
+  closeEditor(); const id=td.dataset.id, m=+td.dataset.m, r=ROW[id], y=td.dataset.y?+td.dataset.y:viewYear;
   edCtx={id,m,y,td}; td.classList.add('sel');
   const isNA=rowIsNA(id,y), v=S.cells[ck(id,y,m)]||'';
   ED.innerHTML=`<div class="hd">${esc(label(r))}</div><div class="sb">${refOf(r)} · ${isNA?'вся строка N/A':MON[m]+' '+y} · ${r.f||'1 each month'}</div>
-   ${isNA?'':`<input type="text" id="edIn" value="${esc(v)}" placeholder="напр. 17 или 14/24">
+   ${isNA?'':`<div id="cal"></div>
    <div class="row"><button class="btn small ok" data-a="save">Сохранить</button><button class="btn small" data-a="np">Not Possible</button><button class="btn small" data-a="na">N/A</button><button class="btn small" data-a="clr">Очистить</button></div>`}
-   <label><input type="checkbox" id="edRow" ${isNA?'checked':''}> Вся строка N/A за ${y} год (не применимо)</label>
+   <label><input type="checkbox" id="edRow" ${isNA?'checked':''}> Строка N/A — не применимо к судну (с ${y} г. и далее)</label>
    <div class="row" style="justify-content:flex-end"><button class="btn small ghost" data-a="x">Закрыть</button></div>`;
   const rc=td.getBoundingClientRect(); ED.style.display='block';
   let left=rc.left+window.scrollX-110; left=Math.max(8,Math.min(left,window.scrollX+document.documentElement.clientWidth-285));
   ED.style.left=left+'px'; ED.style.top=(rc.bottom+window.scrollY+6)+'px';
-  const inp=document.getElementById('edIn'); if(inp){inp.focus();inp.select();inp.onkeydown=e=>{if(e.key==='Enter')edAct('save');if(e.key==='Escape')closeEditor();};}
-  document.getElementById('edRow').onchange=e=>{ const k=`${id}|${y}`; if(e.target.checked) S.rowNA[k]=true; else delete S.rowNA[k]; save(); closeEditor(); rerender(); };
+  edCtx.sel=parseCell(v).days.slice(); drawCal();
+  document.getElementById('edRow').onchange=e=>{ S.rowNA[`${id}|${y}`]=e.target.checked; save(); closeEditor(); rerender(); };
+}
+/* when a date is changed (10 → 12), its time moves with it */
+function moveTimes(id,y,m,oldDays,newDays){
+  if(!oldDays.length||oldDays.length!==newDays.length||oldDays.every((d,i)=>d===newDays[i])) return;
+  const kk=d=>`${id}|${y}|${m}|${d}`, vals=oldDays.map(d=>S.times[kk(d)]);
+  oldDays.forEach(d=>delete S.times[kk(d)]); newDays.forEach((d,i)=>{ if(vals[i]) S.times[kk(d)]=vals[i]; });
 }
 function edAct(a){
   if(!edCtx) return; const {id,m,y}=edCtx, k=ck(id,y,m);
-  if(a==='save'){ const v=document.getElementById('edIn').value.trim(); if(v) S.cells[k]=normCell(v); else delete S.cells[k]; }
+  if(a==='save'){ const old=parseCell(S.cells[k]).days, v=selVal();
+    if(v){ S.cells[k]=v; moveTimes(id,y,m,old,parseCell(v).days); }
+    else if(!/^(N\/A|Not Possible)$/.test(S.cells[k]||'')) delete S.cells[k]; }
   if(a==='np') S.cells[k]='Not Possible';
   if(a==='na') S.cells[k]='N/A';
   if(a==='clr') delete S.cells[k];
@@ -562,9 +622,133 @@ function edAct(a){
 }
 function normCell(v){ const p=parseCell(v); if(p.na) return 'N/A'; if(p.np) return 'Not Possible'; if(p.days.length) return [...new Set(p.days)].sort((a,b)=>a-b).map(pad).join('/'); return v; }
 function closeEditor(){ ED.style.display='none'; if(edCtx&&edCtx.td) edCtx.td.classList.remove('sel'); edCtx=null; }
-ED.addEventListener('click',e=>{const a=e.target.dataset.a; if(a) edAct(a);});
+/* ---------- mini calendar (pick one or several days of the month) ---------- */
+const RUM=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+function selVal(){ return edCtx.sel.length?[...new Set(edCtx.sel)].sort((a,b)=>a-b).map(pad).join('/'):''; }
+function drawCal(){
+  const el=document.getElementById('cal'); if(!el||!edCtx) return; const {y,m,sel}=edCtx;
+  const first=(new Date(y,m,1).getDay()+6)%7, n=new Date(y,m+1,0).getDate(), t=today();
+  let h=`<div class="cal-h">${RUM[m]} ${y}</div><div class="cal-g">${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(d=>`<span class="cal-w">${d}</span>`).join('')}`;
+  for(let i=0;i<first;i++) h+='<span></span>';
+  for(let d=1;d<=n;d++){ const isT=t.getFullYear()===y&&t.getMonth()===m&&t.getDate()===d, wk=(first+d-1)%7>=5;
+    h+=`<button type="button" class="cal-d${sel.includes(d)?' on':''}${isT?' td':''}${wk?' we':''}" data-day="${d}">${d}</button>`; }
+  h+=`</div><div class="cal-s">${sel.length?'Выбрано: <b>'+selVal()+'</b>'+(sel.length>1?'':' · можно отметить ещё день'):'Выбери день в календаре'}</div>`;
+  if(edCtx.group&&edCtx.ids.length>1&&sel.length>1){ const ss=sel.slice().sort((p,q)=>p-q);
+    h+=`<div class="mx"><div class="mx-t">Что проводили в каждый из дней:</div>${ss.map(d=>`<div class="mx-r"><b>${pad(d)}</b>${edCtx.ids.map(id=>
+      `<button type="button" class="mx-c${edCtx.mx[d]&&edCtx.mx[d].has(id)?' on':''}" data-mx="${d}|${id}">${esc((n=>n.length>26?n.slice(0,25)+'…':n)(itemName({id,rot:ROW[id].sec.rot}).replace(/\s*\(training\)$/,'').replace(/^Oil spill.*?— /,'')))}</button>`).join('')}</div>`).join('')}</div>`; }
+  if(edCtx.group&&edCtx.ids.length>1&&edCtx.showNP){
+    h+=`<div class="mx"><div class="mx-t">Не удалось провести (Not Possible):</div><div class="mx-r">${edCtx.ids.map(id=>
+      `<button type="button" class="mx-c np${edCtx.np.has(id)?' on':''}" data-npx="${id}">${esc((n=>n.length>26?n.slice(0,25)+'…':n)(itemName({id,rot:ROW[id].sec.rot}).replace(/\s*\(training\)$/,'')))}</button>`).join('')}</div></div>`; }
+  el.innerHTML=h;
+}
+ED.addEventListener('click',e=>{ const c=e.target.closest('[data-npx]'); if(c&&edCtx&&edCtx.np){ const id=c.dataset.npx; edCtx.np.has(id)?edCtx.np.delete(id):edCtx.np.add(id); drawCal(); e.stopPropagation(); } });
+ED.addEventListener('click',e=>{ const c=e.target.closest('[data-mx]'); if(c&&edCtx&&edCtx.mx){ const [d,id]=c.dataset.mx.split('|'); const st=edCtx.mx[d]=edCtx.mx[d]||new Set();
+  st.has(id)?st.delete(id):st.add(id); drawCal(); e.stopPropagation(); } });
+ED.addEventListener('click',e=>{ const b=e.target.closest('[data-day]'); if(b&&edCtx){ const d=+b.dataset.day; const i=edCtx.sel.indexOf(d);
+  if(i>=0) edCtx.sel.splice(i,1); else { if(edCtx.mx&&!edCtx.mx[d]) edCtx.mx[d]=new Set(edCtx.sel.length?[edCtx.ids[0]]:edCtx.ids); edCtx.sel.push(d); }
+  drawCal(); e.stopPropagation(); } });
+/* ---------- time-range picker (start – end) ---------- */
+const tParse=s=>{const m=/^(\d{1,2}):(\d{2})$/.exec(s||'');return m?{h:+m[1],m:+m[2]}:null;};
+const tFmt=t=>t?`${pad(t.h)}:${pad(t.m)}`:'--:--';
+const tMin=t=>t.h*60+t.m, tFrom=x=>({h:Math.floor(((x%1440)+1440)%1440/60),m:((x%1440)+1440)%1440%60});
+function openTimeEditor(td,day,anchor){
+  closeEditor(); const ids=td.dataset.ids.split(','), y=+td.dataset.y, m=+td.dataset.m; day=day||0;
+  const firstDay=+((td.querySelector('.tl')||{dataset:{day:0}}).dataset.day);
+  const cur=(day?ids.map(id=>S.times[`${id}|${y}|${m}|${day}`]).find(Boolean):'')||(day===firstDay?ids.map(id=>S.times[`${id}|${y}|${m}`]).find(Boolean):'')||'';
+  const [a,b]=cur.split(/\s*[–-]\s*/);
+  edCtx={ids,y,m,td,day,first:day===firstDay,time:true,st:tParse(a),en:tParse(b),which:'st'}; td.classList.add('sel');
+  ED.innerHTML=`<div class="hd">Время проведения${day?` · ${pad(day)}-${MON[m]}`:''}</div>
+   <div class="tp-se">
+     <label class="tp-f"><small>Начало</small><input id="tpS" inputmode="numeric" maxlength="5" placeholder="--:--" autocomplete="off" value="${c2(edCtx.st)}"></label>
+     <span class="tp-dash">–</span>
+     <label class="tp-f"><small>Окончание</small><input id="tpE" inputmode="numeric" maxlength="5" placeholder="--:--" autocomplete="off" value="${c2(edCtx.en)}"></label>
+   </div>
+   <div class="tp-hint" id="tpHint"></div>
+   <div class="tp-wheels"><div class="tp-col"><div class="tp-cap">часы</div><div class="tp-wh" id="whH"></div></div>
+     <div class="tp-colon">:</div><div class="tp-col"><div class="tp-cap">минуты</div><div class="tp-wh" id="whM"></div></div></div>
+   <div class="row"><button class="btn small ok" data-ta="save">Сохранить</button><button class="btn small" data-ta="clr">Очистить</button><button class="btn small ghost" data-ta="x">Закрыть</button></div>`;
+  placeEd(anchor||td);
+  const H=document.getElementById('whH'), M=document.getElementById('whM');
+  H.innerHTML=wheelItems(24); M.innerHTML=wheelItems(60);
+  [H,M].forEach(w=>{ let tm; w.addEventListener('scroll',()=>{ clearTimeout(tm); tm=setTimeout(()=>wheelPick(w),110); });
+    w.addEventListener('click',e=>{ const it=e.target.closest('.tp-it'); if(it) w.scrollTo({top:+it.dataset.v*IH,behavior:'smooth'}); }); });
+  const S_=document.getElementById('tpS'), E_=document.getElementById('tpE');
+  [[S_,'st'],[E_,'en']].forEach(([inp,k])=>{
+    inp.addEventListener('focus',()=>{ edCtx.which=k; syncWheels(); markActive(); inp.select(); });
+    inp.addEventListener('input',()=>{ const t=typedTime(inp.value); inp.classList.toggle('bad',!!inp.value&&!t&&inp.value.replace(/\D/g,'').length>=3);
+      if(t){ edCtx[k]=t; syncWheels(); hint(); if(inp.value.replace(/\D/g,'').length===4){ inp.value=c2(t); if(k==='st'){ E_.focus(); E_.select(); } } } });
+    inp.addEventListener('blur',()=>{ const t=typedTime(inp.value); if(t){ edCtx[k]=t; inp.value=c2(t); inp.classList.remove('bad'); } hint(); });
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ inp.blur(); timeSave(); } if(e.key==='Escape') closeEditor();
+      if(e.key==='ArrowUp'||e.key==='ArrowDown'){ e.preventDefault(); const t=edCtx[k]||{h:0,m:0}; edCtx[k]=tFrom(tMin(t)+(e.key==='ArrowUp'?1:-1)); inp.value=c2(edCtx[k]); syncWheels(); hint(); } });
+  });
+  markActive(); hint(); (edCtx.st?E_:S_).focus(); syncWheels();
+}
+const IH=30;
+const c2=t=>t?`${pad(t.h)}:${pad(t.m)}`:'';
+function wheelItems(n){ let h='<div class="tp-pad"></div>'; for(let i=0;i<n;i++) h+=`<div class="tp-it" data-v="${i}">${pad(i)}</div>`; return h+'<div class="tp-pad"></div>'; }
+/* "1742" → 17:42 · "942" → 09:42 · "17:42" / "17.42" / "17 42" */
+function typedTime(v){ v=(v||'').trim(); let h,m; const a=/^(\d{1,2})\s*[:.\s]\s*(\d{1,2})$/.exec(v);
+  if(a){h=+a[1];m=+a[2];} else { const d=v.replace(/\D/g,''); if(d.length===4){h=+d.slice(0,2);m=+d.slice(2);} else if(d.length===3){h=+d[0];m=+d.slice(1);} else return null; }
+  return h<24&&m<60?{h,m}:null; }
+function syncWheels(){ const t=edCtx&&edCtx[edCtx.which]; const H=document.getElementById('whH'), M=document.getElementById('whM'); if(!H) return;
+  const nw=new Date();
+  H.scrollTop=H._p=(t?t.h:(edCtx.which==='en'&&edCtx.st?edCtx.st.h:nw.getHours()))*IH; M.scrollTop=M._p=(t?t.m:0)*IH;
+  [H,M].forEach(w=>w.querySelectorAll('.tp-it').forEach(it=>it.classList.toggle('on',!!t&&+it.dataset.v===(w===H?t.h:t.m))));
+   }
+function wheelPick(w){ if(!edCtx||!edCtx.time) return; if(Math.abs(w.scrollTop-(w._p??-99))<2) return; w._p=w.scrollTop; const k=edCtx.which, v=Math.round(w.scrollTop/IH);
+  const H=w.id==='whH'; const t=edCtx[k]||{h:H?v:+document.getElementById('whH').scrollTop/IH|0,m:0};
+  edCtx[k]=H?{h:v,m:t.m}:{h:t.h,m:v}; document.getElementById(k==='st'?'tpS':'tpE').value=c2(edCtx[k]);
+  w.querySelectorAll('.tp-it').forEach(it=>it.classList.toggle('on',+it.dataset.v===v)); hint(); }
+function markActive(){ document.querySelectorAll('.tp-f').forEach((l,i)=>l.classList.toggle('on',(i===0)===(edCtx.which==='st'))); }
+function hint(){ const el=document.getElementById('tpHint'); if(!el) return; const {st,en}=edCtx;
+  el.innerHTML=st&&en?`Будет записано: <b>${c2(st)}–${c2(en)}</b>${tMin(en)<tMin(st)?' (через полночь)':''}`:st?'Теперь окончание: набери или прокрути':'Набери время цифрами (напр. 1742) или прокрути барабаны'; }
+function timeSave(){ const c=edCtx; if(!c||!c.time) return;
+  const v=c.st?(c.en?`${c2(c.st)}–${c2(c.en)}`:c2(c.st)):'';
+  c.ids.forEach(id=>{ const base=`${id}|${c.y}|${c.m}`, k=c.day?`${base}|${c.day}`:base;
+    if(v) S.times[k]=v; else delete S.times[k];
+    if(c.day&&c.first) delete S.times[base]; });
+  save(); closeEditor(); rerender(); toast(v?'Время: '+v:'Время удалено'); }
+ED.addEventListener('click',e=>{ if(!edCtx||!edCtx.time) return; const b=e.target.closest('button[data-ta]'); if(!b) return;
+  const a=b.dataset.ta; if(a==='save') timeSave(); else if(a==='clr'){ edCtx.st=edCtx.en=null; timeSave(); } else closeEditor(); });
+function placeEd(td){ const rc=td.getBoundingClientRect(); ED.style.display='block';
+  let left=rc.left+window.scrollX-150; left=Math.max(8,Math.min(left,window.scrollX+document.documentElement.clientWidth-300));
+  ED.style.left=left+'px'; ED.style.top=(rc.top+window.scrollY+Math.min(rc.height,40)+6)+'px'; }
+ED.addEventListener('click',e=>{const a=e.target.dataset.a; if(a) edAct(a); const g=e.target.dataset.ga; if(g) gAct(g);});
+/* one date for a whole combined group (drill + trainings) */
+function openGroupEditor(td){
+  closeEditor(); const ids=td.dataset.ids.split(','), m=+td.dataset.m, y=+td.dataset.y;
+  edCtx={ids,m,y,td,group:true}; td.classList.add('sel');
+  const cur=[...new Set(ids.map(id=>S.cells[ck(id,y,m)]).filter(Boolean))];
+  const mx={}; ids.forEach(id=>parseCell(S.cells[ck(id,y,m)]).days.forEach(d=>{(mx[d]=mx[d]||new Set()).add(id);}));
+  ED.innerHTML=`<div class="hd">${esc(itemName({id:ids[0]}))}${ids.length>1?` + ${ids.length-1}`:''}</div>
+   <div class="sb">${MON[m]} ${y} · запишется в Annex${ids.length>1?' для строк этого номера':''}. Проводили дважды — отметь оба дня</div>
+   <div id="cal"></div>
+   <div class="row"><button class="btn small ok" data-ga="save">Сохранить</button><button class="btn small" data-ga="np">Not Possible${ids.length>1?"…":""}</button><button class="btn small" data-ga="na">N/A</button><button class="btn small" data-ga="clr">Очистить</button><button class="btn small ghost" data-ga="x">Закрыть</button></div>`;
+  const rc=td.getBoundingClientRect(); ED.style.display='block';
+  let left=rc.left+window.scrollX-110; left=Math.max(8,Math.min(left,window.scrollX+document.documentElement.clientWidth-285));
+  ED.style.left=left+'px'; ED.style.top=(rc.top+window.scrollY+Math.min(rc.height,40)+6)+'px';
+  edCtx.mx=mx; edCtx.sel=Object.keys(mx).map(Number).sort((a,b)=>a-b);
+  edCtx.np=new Set(ids.filter(id=>/^Not Possible$/.test(S.cells[ck(id,y,m)]||''))); edCtx.showNP=ids.length>1&&edCtx.np.size>0; drawCal();
+}
+function gAct(a){
+  if(!edCtx||!edCtx.group) return; const {ids,m,y}=edCtx;
+  if(a==='save'){ const sel=edCtx.sel.slice().sort((p,q)=>p-q), mx=edCtx.mx;
+    ids.forEach(id=>{ const k=ck(id,y,m), old=parseCell(S.cells[k]).days;
+      if(ids.length>1&&edCtx.np.has(id)){ S.cells[k]='Not Possible'; return; }
+      if(ids.length>1&&!edCtx.np.has(id)&&S.cells[k]==='Not Possible'&&!sel.length){ delete S.cells[k]; return; }
+      const ds=sel.length===1||ids.length===1?sel:sel.filter(d=>mx[d]&&mx[d].has(id));
+      if(ds.length){ S.cells[k]=ds.map(pad).join('/'); moveTimes(id,y,m,old,ds); }
+      else if(!/^(N\/A|Not Possible)$/.test(S.cells[k]||'')) delete S.cells[k]; }); }
+  if(a==='clr') ids.forEach(id=>delete S.cells[ck(id,y,m)]);
+  if(a==='np'&&ids.length>1){ edCtx.showNP=!edCtx.showNP; drawCal(); return; }
+  if(a==='np'||a==='na') ids.forEach(id=>{ S.cells[ck(id,y,m)]=a==='np'?'Not Possible':'N/A'; });
+  if(a!=='x'){ save(); rerender(); }
+  closeEditor();
+}
 document.addEventListener('click',e=>{
-  const td=e.target.closest('td.m,td.narow'); if(td){ openEditor(td); e.stopPropagation(); return; }
+  const tg=e.target.closest('td.pg'); if(tg){ openGroupEditor(tg); e.stopPropagation(); return; }
+  const tt=e.target.closest('td.tc'); if(tt){ const ln=e.target.closest('.tl')||tt.querySelector('.tl'); openTimeEditor(tt,ln?+ln.dataset.day:0,ln||tt); e.stopPropagation(); return; }
+  const td=e.target.closest('td.m,td.narow,td.pd'); if(td){ openEditor(td); e.stopPropagation(); return; }
   if(!e.target.closest('#editor')) closeEditor();
 });
 
@@ -576,47 +760,66 @@ const SESS_OF={as1:'AS',as2:'AS',as3:'AS',as4:'AS',t1:'AS',t2:'AS',t3:'AS',t6:'A
   t7:'MED',t8:'MED',e7:'MED',e10:'MED',
   t9:'ENG',t10:'ENG',t13:'ENG',e1:'ENG',e2:'ENG',e3:'ENG',e4:'ENG',e5:'ENG',e6:'ENG',e9:'ENG',e11:'ENG',
   s1:'SEC',s2:'SEC',s3:'SEC',p1:'PREP',p2:'PREP',pc1:'PREP'};
-const KORD={FIRE:1,AS:2,MED:3,ENG:4,SEC:5,PREP:6};
+const KORD={FIRE:1,AS:2,MED:3,ENG:4,OIL:5,SEC:6,PREP:7};
 function evalRow(r,F,L){
   const iv=interval(r); if(!iv) return null;
   const last=lastDone(r.id,F), due=last?addIv(last,iv):null;
   if(due&&due>L) return null;
   return {id:r.id,last,due,over:!due||due<F};
 }
+const hasEntry=(id,y,m)=>!!(S.cells[ck(id,y,m)]||'').trim();
+/* due this month, OR already has an entry in this month (done early / as required) */
+function evalMonth(r,F,L,y,m){
+  const done=hasEntry(r.id,y,m);
+  if(r.f==='As required') return done?{id:r.id,last:lastDone(r.id,F),due:null,over:false}:null;
+  let e=evalRow(r,F,L);
+  if(!e&&done){ const iv=interval(r), last=lastDone(r.id,F); e={id:r.id,last,due:last&&iv?addIv(last,iv):null,over:false}; }
+  if(e&&done) e.over=false;
+  return e;
+}
+function cellDate(id,y,m){ const v=S.cells[ck(id,y,m)]; if(!v) return ''; const p=parseCell(v);
+  if(p.np) return 'Not Possible'; if(p.na) return 'N/A';
+  return p.days.length?`${p.days.map(pad).join('/')}-${MON[m]}-${String(y).slice(2)}`:esc(v); }
 function generate(y,m){
   const st=S.settings, F=new Date(y,m,1), L=new Date(y,m+1,0), items=[];
   for(const s of Object.values(SECS)){ if(s.annex!==1) continue;
     if(s.rot){ const rows=s.rows.filter(r=>applicable(r,y)); if(!rows.length) continue;
       let last=null; rows.forEach(r=>{const l=lastDone(r.id,F); if(l&&(!last||l>last)) last=l;});
       const due=last?addIv(last,interval(rows[0])):null;
-      items.push({id:rotPick(s,F).id,rot:s.rot,last,due,over:!due||due<F}); continue; }
-    for(const r of s.rows){ if(r.sub||!applicable(r,y)||r.f==='As required') continue; const e=evalRow(r,F,L); if(e) items.push(e); }
+      const doneRows=rows.filter(r=>hasEntry(r.id,y,m));          /* already conducted this month → real location/scenario */
+      if(doneRows.length) doneRows.forEach(r=>items.push({id:r.id,rot:s.rot,last,due,over:false}));
+      else items.push({id:rotPick(s,F).id,rot:s.rot,last,due,over:!due||due<F});
+      continue; }
+    for(const r of s.rows){ if(r.sub||!applicable(r,y)) continue; const e=evalMonth(r,F,L,y,m); if(e) items.push(e); }
   }
+  /* overdue (due date before the 1st of this month and not done this month) → separate sheet */
+  const odDrills=items.filter(i=>i.over).sort((a,b)=>ordIn(a)-ordIn(b));
+  items.splice(0,items.length,...items.filter(i=>!i.over));
   const eff=i=>i.over?addDays(F,-1):i.due;
   const engHas=items.some(i=>!i.rot&&SESS_OF[i.id]==='ENG');
-  const keyOf=i=>i.rot==='fire'?'FIRE':i.rot==='oil'?(engHas?'ENG':'FIRE'):SESS_OF[i.id];
+  const keyOf=i=>i.rot==='fire'?'FIRE':i.rot==='oil'?'OIL|'+i.id:(SESS_OF[i.id]||'ONE|'+i.id);   /* oil spill & 'as required' drills: always their own line */
   const by={}; items.forEach(i=>(by[keyOf(i)]=by[keyOf(i)]||[]).push(i));
   let groups=[];
   for(const k in by){ let cur=null;
     for(const it of by[k].sort((a,b)=>eff(a)-eff(b))){
       if(!cur||((eff(it)-cur.dl)/864e5>(+st.split||14)&&!it.rot)){ cur={key:k,dl:eff(it),items:[]}; groups.push(cur); }
       cur.items.push(it); } }
-  if(st.pairAsFire){ const f=groups.find(g=>g.key==='FIRE'), a=groups.find(g=>g.key==='AS');
+  { const f=groups.find(g=>g.key==='FIRE'), a=groups.find(g=>g.key==='AS'&&g.items.some(i=>i.id==='as1'))||groups.find(g=>g.key==='AS');
     if(f&&a){ f.items.push(...a.items); f.dl=new Date(Math.min(f.dl,a.dl)); groups=groups.filter(g=>g!==a); } }
   /* Annex 1 order: drills first (as they appear in the Annex), combined trainings right under them */
   groups.forEach(g=>g.items.sort((a,b)=>(isTrg(a)-isTrg(b))||ordIn(a)-ordIn(b)));
   groups.sort((a,b)=>ordIn(a.items[0])-ordIn(b.items[0]));
   const tr=[];
   for(const s of Object.values(SECS)){ if(s.annex!==2) continue;
-    for(const r of s.rows){ if(r.sub||!applicable(r,y)) continue; const e=evalRow(r,F,L); if(e) tr.push(e); } }
+    for(const r of s.rows){ if(r.sub||!applicable(r,y)) continue; const e=evalMonth(r,F,L,y,m); if(e) tr.push(e); } }
   tr.sort((a,b)=>ordIn(a)-ordIn(b));
-  return {groups,trainings:tr};
+  return {groups,trainings:tr.filter(t=>!t.over),odDrills,odTr:tr.filter(t=>t.over)};
 }
 const ORD=Object.keys(ROW); const ordIn=i=>ORD.indexOf(i.id);
 const isTrg=i=>!i.rot&&ROW[i.id].sec.id==='TR'&&!/drill/i.test(label(ROW[i.id]));
 function itemName(i){
   if(i.rot==='fire') return 'Fire drill';
-  if(i.rot==='oil') return 'Oil spill / pollution response drill';
+  if(i.rot==='oil') return 'Oil spill / pollution response drill — '+strip(ROW[i.id].t).replace(/\s*(Note:|E\.g\.,).*$/,'').replace(/\s*\/\s*\//g,' /').replace(/\s*#$/,'');
   const r=ROW[i.id], a=label(r), b=strip(r.t).replace(/\s*[-–]\s*Refer\b.*$/,'');
   let n=(['AS','TR','EM'].includes(r.sec.id)&&b.length<a.length&&b.length>8?b:a).replace(/\s*#$/,'').replace(/[.,]$/,'');
   if(ROW[i.id].sec.id==='TR'&&!/drill/i.test(n)) n+=' (training)';
@@ -627,43 +830,142 @@ function itemName(i){
    MONTHLY SHEET  (one A4 page, to print and fill in by hand)
    ===================================================================== */
 const GRP={ALL:'All','DECK OFF':'Deck Off.',DECK:'Deck',ENGINE:'Engine',OFFICERS:'All Off.'};
-function sheetHTML(ym){
+function sheetHTML(ym,plain){
   const [y,m]=ym.split('-').map(Number); const P=generate(y,m-1); const st=S.settings;
+  const tk=id=>`${id}|${y}|${m-1}`;
+  const dcell=id=>plain?`<td class="c dt">${cellDate(id,y,m-1)}</td>`:`<td class="c dt pd" data-id="${id}" data-m="${m-1}" data-y="${y}" title="Нажми, чтобы вписать дату — она запишется в Annex">${cellDate(id,y,m-1)}</td>`;
+  /* occurrences = every day entered for this line/group in this month (a drill can be done twice) */
+  const days=ids=>[...new Set(ids.flatMap(id=>parseCell(S.cells[ck(id,y,m-1)]).days))].sort((a,b)=>a-b);
+  const short=id=>{ const n=itemName({id,rot:ROW[id].sec.rot}).replace(/\s*\(training\)$/,'').replace(/^Oil spill.*?— /,'Oil spill: '); return n.length>24?n.slice(0,23)+'…':n; };
+  const tOf=(ids,d,first)=>ids.map(id=>S.times[`${id}|${y}|${m-1}|${d}`]).find(Boolean)||(d===first?ids.map(id=>S.times[tk(id)]).find(Boolean):'')||'';
+  const gcell=(ids,rs)=>{ const ds=days(ids); let txt;
+    if(!ds.length) txt=[...new Set(ids.map(id=>cellDate(id,y,m-1)).filter(Boolean))].join('<br>');
+    else txt=ds.map(d=>{ const who=ids.filter(id=>parseCell(S.cells[ck(id,y,m-1)]).days.includes(d));
+      const part=ids.length>1&&who.length<ids.length;
+      return `<div class="oc">${pad(d)}-${MON[m-1]}-${String(y).slice(2)}</div>`; }).join('');
+    return plain?`<td class="c dt"${rs>1?` rowspan="${rs}"`:''}>${txt}</td>`:`<td class="c dt pg"${rs>1?` rowspan="${rs}"`:''} data-ids="${ids.join(',')}" data-m="${m-1}" data-y="${y}" title="Нажми, чтобы выбрать дату (можно 2 дня, если проводили дважды)">${txt}</td>`; };
+  const tcell=(ids,rs)=>{ const ds=days(ids), list=ds.length?ds:[0];
+    const txt=list.map(d=>{ const who=d?ids.filter(id=>parseCell(S.cells[ck(id,y,m-1)]).days.includes(d)):ids;
+      const part=d&&ids.length>1&&who.length<ids.length; const v=tOf(ids,d,list[0]);
+      return `<div class="oc tl" data-day="${d}">${esc(v)||'&nbsp;'}</div>`; }).join('');
+    return `<td class="c dt${plain?'':' tc'}"${rs>1?` rowspan="${rs}"`:''} data-ids="${ids.join(',')}" data-y="${y}" data-m="${m-1}" title="Нажми, чтобы выбрать время начала и окончания">${txt}</td>`; };
   const dt=d=>d?fmt(d):'—';
   const last=i=>i.over?`<b class="od" title="срок уже прошёл">${dt(i.last)}</b>`:dt(i.last);
-  const fq=i=>{const iv=interval(ROW[i.id]); return iv?(iv.d?iv.d+'D':iv.m+'M'):(ROW[i.id].f||'');};
-  let h=`<div class="sh"><div class="shh"><div><div class="sht">DRILLS &amp; TRAININGS — ${MON[m-1].toUpperCase()} ${y}</div>
-    <div class="shs">${st.vessel?esc(st.vessel):''}</div></div><div class="shs" style="text-align:right">Annex 1 ${A1.rev} · Annex 2 ${A2.rev}</div></div>
-    <table class="st"><colgroup><col style="width:4%"><col><col style="width:7%"><col style="width:9%"><col style="width:13%"><col style="width:13%"></colgroup>
-    <thead><tr><th>№</th><th>Drill</th><th>Freq.</th><th>Last</th><th>Date</th><th>Time</th></tr></thead><tbody>`;
-  P.groups.forEach((g,gi)=>{ const n=g.items.length;
-    g.items.forEach((i,ii)=>{ h+=`<tr class="${ii===0?'gs':''}">`+(ii===0?`<td rowspan="${n}" class="c">${gi+1}</td>`:'')+
-      `<td class="${ii?'sub':'main'}">${ii?'+ ':''}${esc(itemName(i))}</td><td class="c">${fq(i)}</td><td class="c">${last(i)}</td>`+
-      (ii===0?`<td rowspan="${n}"></td><td rowspan="${n}"></td>`:'')+'</tr>'; }); });
-  if(!P.groups.length) h+=`<tr><td colspan="6" class="c">—</td></tr>`;
-  h+=`</tbody></table><table class="st" style="margin-top:3mm"><colgroup><col style="width:4%"><col><col style="width:8%"><col style="width:7%"><col style="width:9%"><col style="width:13%"><col style="width:13%"></colgroup>
-    <thead><tr><th>№</th><th>Training</th><th>Group</th><th>Freq.</th><th>Last</th><th>Date</th><th>Time</th></tr></thead><tbody>`;
-  P.trainings.forEach((t,i)=>{ const r=ROW[t.id];
-    h+=`<tr><td class="c">${i+1}</td><td>${esc(label(r))}</td><td class="c">${GRP[r.grp||r.sec.grp]||''}</td><td class="c">${fq(t)}</td><td class="c">${last(t)}</td><td></td><td></td></tr>`; });
-  if(!P.trainings.length) h+=`<tr><td colspan="7" class="c">—</td></tr>`;
-  h+=`</tbody></table></div>`;
+  const fq=i=>{const iv=interval(ROW[i.id]); return iv?(iv.d?iv.d+'D':iv.m+'M'):(ROW[i.id].f==='As required'?'As req.':ROW[i.id].f||'');};
+  const page=(od,groups,trs)=>{
+    const dueTd=i=>od?`<td class="c"><b class="od">${i.due?fmt(i.due):'—'}</b></td>`:'';
+    let h=`<div class="sh${od?' sh-od':''}"><div class="shh"><div><div class="sht">${od?`OVERDUE — as of 01-${MON[m-1]}-${String(y).slice(2)}`:`DRILLS &amp; TRAININGS — ${MON[m-1].toUpperCase()} ${y}`}</div>
+      <div class="shs">${st.vessel?esc(st.vessel):''}${od?(st.vessel?' · ':'')+'срок прошёл до начала месяца — провести как можно раньше':''}</div></div><div class="shs" style="text-align:right">Annex 1 ${A1.rev} · Annex 2 ${A2.rev}</div></div>`;
+    if(!od||groups.length){
+      h+=`<table class="st"><colgroup><col style="width:4%"><col><col style="width:7%"><col style="width:9%">${od?'<col style="width:9%">':''}<col style="width:13%"><col style="width:13%"></colgroup>
+      <thead><tr><th>№</th><th>Drill</th><th>Freq.</th><th>Last</th>${od?'<th>Due</th>':''}<th>Date</th><th>Time</th></tr></thead><tbody>`;
+      groups.forEach((g,gi)=>{ const n=g.items.length;
+        g.items.forEach((i,ii)=>{ h+=`<tr class="${ii===0?'gs':''}">`+(ii===0?`<td rowspan="${n}" class="c">${gi+1}</td>`:'')+
+          `<td class="${ii?'sub':'main'}">${ii?'+ ':''}${esc(itemName(i))}</td><td class="c">${fq(i)}</td><td class="c">${dt(i.last)}</td>${dueTd(i)}`+
+          (ii===0?gcell(g.items.map(x=>x.id),n)+tcell(g.items.map(x=>x.id),n):'')+'</tr>'; }); });
+      if(!groups.length) h+=`<tr><td colspan="${od?7:6}" class="c">—</td></tr>`;
+      h+=`</tbody></table>`; }
+    if(!od||trs.length){
+      h+=`<table class="st" style="margin-top:3mm"><colgroup><col style="width:4%"><col><col style="width:8%"><col style="width:7%"><col style="width:9%">${od?'<col style="width:9%">':''}<col style="width:13%"><col style="width:13%"></colgroup>
+      <thead><tr><th>№</th><th>Training</th><th>Group</th><th>Freq.</th><th>Last</th>${od?'<th>Due</th>':''}<th>Date</th><th>Time</th></tr></thead><tbody>`;
+      trs.forEach((t,i)=>{ const r=ROW[t.id];
+        h+=`<tr><td class="c">${i+1}</td><td>${esc(label(r))}</td><td class="c">${GRP[r.grp||r.sec.grp]||''}</td><td class="c">${fq(t)}</td><td class="c">${dt(t.last)}</td>${dueTd(t)}${gcell([t.id],1)}${tcell([t.id],1)}</tr>`; });
+      if(!trs.length) h+=`<tr><td colspan="${od?8:7}" class="c">—</td></tr>`;
+      h+=`</tbody></table>`; }
+    return h+'</div>'; };
+  let h=page(false,P.groups,P.trainings);
+  if(P.odDrills.length||P.odTr.length) h+=(plain?'<br clear="all" style="page-break-before:always">':'')+page(true,P.odDrills.map(i=>({items:[i]})),P.odTr);
   return h;
 }
 function renderPlan(){ const o=document.getElementById('planOut'); o.innerHTML=sheetHTML(curYm()); fitSheet(); }
-function fitSheet(){ const sh=document.querySelector('#planOut .sh'); if(!sh) return;
+function fitSheet(){ document.querySelectorAll('#planOut .sh').forEach(fitOne); }
+function fitOne(sh){
   const pw=273*96/25.4, ph=186*96/25.4-8;            /* A4 landscape, 12 mm margins */
   const keep=[sh.style.width,sh.style.padding,sh.style.boxShadow];
   sh.style.width=pw+'px'; sh.style.padding='0'; let f=1;
   for(let k=0;k<12;k++){ sh.style.setProperty('--fit',f); if(sh.scrollHeight<=ph||f<=0.62) break; f=Math.round((f-0.02)*100)/100; }
   [sh.style.width,sh.style.padding]=keep; }
 window.addEventListener('beforeprint',fitSheet);
-const curYm=()=>document.getElementById('planMonth').value;
+const curYm=()=>{ const el=document.getElementById('planMonth'); if(!/^\d{4}-\d{2}$/.test(el.value)) el.value=nextYm(); return el.value; };
+document.getElementById('planOut').addEventListener('change',e=>{ const t=e.target; if(!t.classList.contains('tm')) return;
+  const [y,m]=curYm().split('-').map(Number); const v=t.value.trim();
+  t.dataset.ids.split(',').forEach(id=>{ const k=`${id}|${y}|${m-1}`; if(v) S.times[k]=v; else delete S.times[k]; });
+  save(); toast(v?'Время сохранено':'Время удалено'); });
+document.getElementById('planOut').addEventListener('keydown',e=>{ if(e.target.classList.contains('tm')&&e.key==='Enter') e.target.blur(); });
 function doGenerate(ym){ document.getElementById('planMonth').value=ym; show('plan'); }
+/* ---------- Word export: a real .docx (Office Open XML), built in the browser, no internet needed ---------- */
+function occ(ids,y,m){ // all dates (and their times) entered for these lines in month m (0-based)
+  const ds=[...new Set(ids.flatMap(id=>parseCell(S.cells[ck(id,y,m)]).days))].sort((a,b)=>a-b), first=ds.length?ds[0]:0;
+  const tOf=d=>ids.map(id=>S.times[`${id}|${y}|${m}|${d}`]).find(Boolean)||(d===first?ids.map(id=>S.times[`${id}|${y}|${m}`]).find(Boolean):'')||'';
+  if(!ds.length) return {dates:[...new Set(ids.map(id=>cellDate(id,y,m)).filter(Boolean))],times:[tOf(0)].filter(Boolean)};
+  return {dates:ds.map(d=>`${pad(d)}-${MON[m]}-${String(y).slice(2)}`),times:ds.map(tOf)};
+}
+const CRC_T=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+function crc32(u){let c=0xFFFFFFFF;for(let i=0;i<u.length;i++)c=CRC_T[(c^u[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function zipStore(files,mime){ // minimal ZIP writer (no compression)
+  const enc=new TextEncoder(), parts=[], cen=[]; let off=0;
+  for(const f of files){ const nm=enc.encode(f.name), dt=enc.encode(f.data), crc=crc32(dt);
+    const L=new DataView(new ArrayBuffer(30)); L.setUint32(0,0x04034b50,true); L.setUint16(4,20,true); L.setUint16(6,0x0800,true);
+    L.setUint16(10,0,true); L.setUint16(12,0x21,true); L.setUint32(14,crc,true); L.setUint32(18,dt.length,true); L.setUint32(22,dt.length,true); L.setUint16(26,nm.length,true);
+    parts.push(new Uint8Array(L.buffer),nm,dt);
+    const C=new DataView(new ArrayBuffer(46)); C.setUint32(0,0x02014b50,true); C.setUint16(4,20,true); C.setUint16(6,20,true); C.setUint16(8,0x0800,true);
+    C.setUint16(14,0x21,true); C.setUint32(16,crc,true); C.setUint32(20,dt.length,true); C.setUint32(24,dt.length,true); C.setUint16(28,nm.length,true); C.setUint32(42,off,true);
+    cen.push(new Uint8Array(C.buffer),nm); off+=30+nm.length+dt.length; }
+  const size=cen.reduce((a,c)=>a+c.length,0), E=new DataView(new ArrayBuffer(22));
+  E.setUint32(0,0x06054b50,true); E.setUint16(8,files.length,true); E.setUint16(10,files.length,true); E.setUint32(12,size,true); E.setUint32(16,off,true);
+  return new Blob([...parts,...cen,new Uint8Array(E.buffer)],{type:mime});
+}
+function docxXML(ym){
+  const [y,m]=ym.split('-').map(Number), P=generate(y,m-1), st=S.settings, M=m-1, CW=15478; /* A4 landscape, 12 mm margins (twips) */
+  const x=t=>String(t??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const fq=i=>{const iv=interval(ROW[i.id]); return iv?(iv.d?iv.d+'D':iv.m+'M'):(ROW[i.id].f==='As required'?'As req.':'');};
+  const dt=d=>d?fmt(d):'—';
+  const run=(t,o={})=>`<w:r><w:rPr>${o.b?'<w:b/>':''}${o.red?'<w:color w:val="C00000"/>':''}${o.sz?`<w:sz w:val="${o.sz}"/><w:szCs w:val="${o.sz}"/>`:''}</w:rPr><w:t xml:space="preserve">${x(t)}</w:t></w:r>`;
+  const para=(t,o={})=>`<w:p><w:pPr>${o.c?'<w:jc w:val="center"/>':''}${o.ind?'<w:ind w:left="200"/>':''}${o.after?`<w:spacing w:after="${o.after}"/>`:''}</w:pPr>${t===''?'':run(t,o)}</w:p>`;
+  const tc=(lines,w,o={})=>`<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${o.span?`<w:gridSpan w:val="${o.span}"/>`:''}${o.vm==='r'?'<w:vMerge w:val="restart"/>':o.vm==='c'?'<w:vMerge/>':''}${o.shd?'<w:shd w:val="clear" w:color="auto" w:fill="E6E6E6"/>':''}<w:vAlign w:val="center"/></w:tcPr>${
+    (o.vm==='c'?['']:(Array.isArray(lines)?(lines.length?lines:['']):[lines])).map(l=>para(l,o)).join('')}</w:tc>`;
+  const table=(cols,rows)=>`<w:tbl><w:tblPr><w:tblW w:w="${CW}" w:type="dxa"/><w:tblLayout w:type="fixed"/><w:tblBorders>${['top','left','bottom','right','insideH','insideV'].map(b=>`<w:${b} w:val="single" w:sz="6" w:space="0" w:color="000000"/>`).join('')}</w:tblBorders>
+    <w:tblCellMar><w:top w:w="20" w:type="dxa"/><w:left w:w="70" w:type="dxa"/><w:bottom w:w="20" w:type="dxa"/><w:right w:w="70" w:type="dxa"/></w:tblCellMar></w:tblPr>
+    <w:tblGrid>${cols.map(([,w])=>`<w:gridCol w:w="${w}"/>`).join('')}</w:tblGrid>
+    <w:tr><w:trPr><w:tblHeader/><w:cantSplit/></w:trPr>${cols.map(([t,w])=>tc(t,w,{c:1,b:1,shd:1})).join('')}</w:tr>${rows}</w:tbl>`;
+  const tr=cells=>`<w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="320" w:hRule="atLeast"/></w:trPr>${cells}</w:tr>`;  /* ≥5.6 mm: room to write by hand */
+  const page=(od,groups,trs)=>{
+    let h=para(od?`OVERDUE — as of 01-${MON[M]}-${String(y).slice(2)}`:`DRILLS & TRAININGS — ${MON[M].toUpperCase()} ${y}`,{b:1,sz:30,red:od})
+      +para([st.vessel||'',`Annex 1 ${A1.rev} · Annex 2 ${A2.rev}`,od?'срок прошёл до начала месяца — провести как можно раньше':''].filter(Boolean).join(' · '),{sz:16,after:120});
+    const ex=od?[['Due',1320]]:[];
+    if(!od||groups.length){
+      const cols=[['№',520],['Drill',0],['Freq.',760],['Last',1320],...ex,['Date',1640],['Time',1640]]; cols[1][1]=CW-cols.reduce((a,c)=>a+c[1],0);
+      let rows='';
+      groups.forEach((g,gi)=>{ const o=occ(g.items.map(z=>z.id),y,M);
+        g.items.forEach((i,ii)=>{ const vm=g.items.length>1?(ii?'c':'r'):null;
+          rows+=tr(tc(String(gi+1),520,{c:1,vm})+tc((ii?'+ ':'')+itemName(i),cols[1][1],{b:!ii,ind:ii})+tc(fq(i),760,{c:1})+tc(dt(i.last),1320,{c:1})
+            +(od?tc(dt(i.due),1320,{c:1,red:1,b:1}):'')+tc(o.dates,1640,{c:1,b:1,vm})+tc(o.times,1640,{c:1,b:1,vm})); }); });
+      if(!groups.length) rows+=tr(tc('—',CW,{c:1,span:cols.length}));
+      h+=table(cols,rows)+para('',{after:120}); }
+    if(!od||trs.length){
+      const cols=[['№',520],['Training',0],['Group',1040],['Freq.',760],['Last',1320],...ex,['Date',1640],['Time',1640]]; cols[1][1]=CW-cols.reduce((a,c)=>a+c[1],0);
+      let rows='';
+      trs.forEach((t,i)=>{ const R=ROW[t.id], o=occ([t.id],y,M);
+        rows+=tr(tc(String(i+1),520,{c:1})+tc(label(R),cols[1][1])+tc(GRP[R.grp||R.sec.grp]||'',1040,{c:1})+tc(fq(t),760,{c:1})+tc(dt(t.last),1320,{c:1})
+          +(od?tc(dt(t.due),1320,{c:1,red:1,b:1}):'')+tc(o.dates,1640,{c:1,b:1})+tc(o.times,1640,{c:1,b:1})); });
+      if(!trs.length) rows+=tr(tc('—',CW,{c:1,span:cols.length}));
+      h+=table(cols,rows); }
+    return h; };
+  let body=page(false,P.groups,P.trainings);
+  if(P.odDrills.length||P.odTr.length) body+='<w:p><w:r><w:br w:type="page"/></w:r></w:p>'+page(true,P.odDrills.map(i=>({items:[i]})),P.odTr);
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}
+<w:sectPr><w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/><w:pgMar w:top="680" w:right="680" w:bottom="680" w:left="680" w:header="0" w:footer="0" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+}
 function downloadWord(){
-  const ym=curYm(); const css=document.getElementById('sheetCss').textContent.replace(/calc\(([\d.]+)(pt|mm|px) \* var\(--fit,1\)\)/g,'$1$2');
-  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><style>@page WordSection1{size:29.7cm 21cm;mso-page-orientation:landscape;margin:1.2cm}div.WordSection1{page:WordSection1}${css}</style></head><body><div class="WordSection1">${sheetHTML(ym)}</div></body></html>`;
-  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿',html],{type:'application/msword'}));
-  a.download=`Drills_${ym}.doc`; document.body.appendChild(a); a.click(); a.remove();
+  const ym=curYm();
+  const files=[
+    {name:'[Content_Types].xml',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>'},
+    {name:'_rels/.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>'},
+    {name:'word/_rels/document.xml.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'},
+    {name:'word/styles.xml',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:eastAsia="Arial" w:cs="Arial"/><w:sz w:val="19"/><w:szCs w:val="19"/><w:lang w:val="en-GB"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style></w:styles>'},
+    {name:'word/document.xml',data:docxXML(ym)}];
+  const a=document.createElement('a'); a.href=URL.createObjectURL(zipStore(files,'application/vnd.openxmlformats-officedocument.wordprocessingml.document'));
+  a.download=`Drills_${ym}.docx`; document.body.appendChild(a); a.click(); a.remove();
 }
 
 /* =====================================================================
@@ -681,8 +983,6 @@ function renderSettings(){
      <option value="mi" ${st.flag==='mi'?'selected':''}>Marshall Islands — MOB каждые 3 месяца</option></select></div>
   ${chk('rescueBoat','Rescue boat (кроме L/B) установлен')}${chk('davitLR','Davit-launched L/R установлен')}${chk('opl','Overridable Power Limitation (OPL) установлен')}
   ${chk('panama','PCSOPEP (Панамский канал) — применимо')}${chk('uscg','USCG PREP (VRP / NTVRP) — применимо')}
-  <h3>Список на месяц</h3>
-  ${chk('pairAsFire','Fire drill и Abandon ship — одной строкой (один день)')}
   <h3>Данные</h3>
   <p class="hint">Все даты хранятся в этом браузере на этом компьютере. Регулярно делай <b>Export</b> — это резервная копия в одном файле. На другом компьютере открой этот же HTML и нажми <b>Import</b>.</p>
   <p class="hint">Записей в Annex: ${Object.keys(S.cells).length} · ${storageOK?'сохранение в браузере работает':'<b style="color:var(--bad)">сохранение в браузере НЕ работает — делай Export</b>'}</p>
@@ -732,12 +1032,19 @@ document.getElementById('expBtn').onclick=()=>{
 };
 document.getElementById('impBtn').onclick=()=>document.getElementById('impFile').click();
 document.getElementById('impFile').onchange=e=>{ const f=e.target.files[0]; if(!f) return; const rd=new FileReader();
-  rd.onload=()=>{ try{ const d=JSON.parse(rd.result); if(!confirm('Заменить текущие данные данными из файла?')) return; applyImport(d,false); save(); rerender(); toast('Данные загружены'); }catch(err){ alert('Это не файл резервной копии Drill Planner'); } e.target.value=''; };
+  rd.onload=()=>{ try{ const d=JSON.parse(rd.result); if(d.app!=='drill-planner') throw 0; if(confirm('Заменить текущие данные данными из файла?')){ applyImport(d,false); norm(); save(); rerender(); toast('Данные загружены'); } }catch(err){ alert('Это не файл резервной копии Drill Planner'); } e.target.value=''; };
   rd.readAsText(f); };
+/* another tab/window with this planner saved → take its data, so nothing gets overwritten */
+window.addEventListener('storage',e=>{ if(e.key!==KEY||!e.newValue) return;
+  try{ S=JSON.parse(e.newValue); norm(); closeEditor(); rerender(); toast('Данные обновлены из другой вкладки'); }catch(_){} });
+document.addEventListener('keydown',e=>{ if(ED.style.display!=='block'||!edCtx) return;
+  if(e.key==='Escape'){ closeEditor(); e.preventDefault(); }
+  else if(e.key==='Enter'&&!edCtx.time&&!/INPUT|SELECT/.test((e.target.tagName||''))){ e.preventDefault(); edCtx.group?gAct('save'):edAct('save'); } });
 let tt; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),2600); }
 
 load();
-viewYear=today().getFullYear(); if(!Object.keys(S.cells).some(k=>k.split('|')[1]==viewYear)) viewYear=+S.settings.year||viewYear;
+viewYear=today().getFullYear();
+if(loadWarn) setTimeout(()=>toast(loadWarn),300);
 document.getElementById('planMonth').value=nextYm();
 let v0='a1'; try{v0=sessionStorage.getItem('dpView')||'a1';}catch(e){}
 rerender(); show(v0);
